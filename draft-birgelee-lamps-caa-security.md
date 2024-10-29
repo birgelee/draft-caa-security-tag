@@ -9,19 +9,19 @@ number:
 date:
 consensus: true
 v: 3
-area: AREA
-workgroup: LAMPS
+area: "Security"
+workgroup: "Limited Additional Mechanisms for PKIX and SMIME"
 keyword:
  - next generation
  - unicorn
  - sparkling distributed ledger
 venue:
-  group: WG
-  type: Working Group
-  mail: WG@example.com
-  arch: https://example.com/WG
-  github: USER/REPO
-  latest: https://example.com/LATEST
+  group: "Limited Additional Mechanisms for PKIX and SMIME"
+  type: "Working Group"
+  mail: "spasm@ietf.org"
+  arch: "https://mailarchive.ietf.org/arch/browse/spasm/"
+  github: "birgelee/draft-caa-security-tag"
+  latest: "https://birgelee.github.io/draft-caa-security-tag/draft-birgelee-lamps-caa-security.html"
 
 author:
  -
