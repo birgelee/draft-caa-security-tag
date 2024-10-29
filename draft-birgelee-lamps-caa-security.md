@@ -1,7 +1,7 @@
 ---
 title: "CAA Security Tag for Cryptographic Domain Validation"
 abbrev: "CAA Security Tag"
-category: info
+category: exp
 
 docname: draft-birgelee-lamps-caa-security-latest
 submissiontype: IETF  # also: "independent", "editorial", "IAB", or "IRTF"
