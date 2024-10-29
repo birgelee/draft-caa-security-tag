@@ -19,18 +19,18 @@
 # Change the file extension to match the format (.xml for XML, etc...)
 #
 ###
-title: "TODO - Your title"
-abbrev: "TODO - Abbreviation"
-category: info
+title: "CAA Security Tag for Cryptographic Domain Validation"
+abbrev: "CAA Security Tag"
+category: experimental
 
-docname: draft-todo-yourname-protocol-latest
+docname: draft-birgelee-lamps-caa-security-latest
 submissiontype: IETF  # also: "independent", "editorial", "IAB", or "IRTF"
 number:
 date:
 consensus: true
 v: 3
 area: AREA
-workgroup: WG Working Group
+workgroup: LAMPS
 keyword:
  - next generation
  - unicorn
@@ -45,9 +45,9 @@ venue:
 
 author:
  -
-    fullname: Your Name Here
-    organization: Your Organization Here
-    email: your.email@example.com
+    fullname: Henry Birge-Lee
+    organization: Princeton University
+    email: birgelee@princeton.edu
 
 normative:
 
