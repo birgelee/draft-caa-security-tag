@@ -12,9 +12,8 @@ v: 3
 area: "Security"
 workgroup: "Limited Additional Mechanisms for PKIX and SMIME"
 keyword:
- - next generation
- - unicorn
- - sparkling distributed ledger
+ - PKI
+ - CAA
 venue:
   group: "Limited Additional Mechanisms for PKIX and SMIME"
   type: "Working Group"
@@ -43,9 +42,9 @@ CAA "security" tags are a type of CAA record (defined in RFC 6844) with the crit
 
 # Introduction
 
-A "security" CAA record is compliant with RFC 6844 and puts restrictions on the circumstances under which a CA can sign a certificate for a given domain. A “security” CAA record on a domain implies that validation for this domain must be done in a manner that offers security against network adversaries even if an adversary is capable of intercepting and/or modifying domain-control-validation-related communication between the CA and the domain being validated. Issuance of a certificate to a domain with a “security” CAA tag MUST follow one of the specified Cryptographic Domain Validation (CDV) methods outlined in this document or future extensions. CDV methods MUST rely on cryptographic protocols (like DNSSEC or DoH/DoT) that offer security properties even in the presence of man-in-the-middle adversaries that can intercept any communication which occurs over the public Internet.
+A "security" CAA record is compliant with RFC 6844 and puts restrictions on the circumstances under which a CA can sign a certificate for a given domain. A “security” CAA record on a domain implies that validation for this domain must be done in a manner that offers security against network adversaries even if an adversary is capable of intercepting and/or modifying domain-control-validation-related communication between the CA and the domain being validated. Issuance of a certificate to a domain with a "security" CAA tag MUST follow one of the specified Cryptographic Domain Validation (CDV) methods outlined in this document or future extensions. CDV methods MUST rely on cryptographic protocols (like DNSSEC or DoH/DoT) that offer security properties even in the presence of man-in-the-middle adversaries that can intercept any communication which occurs over the public Internet.
 
-Not all CDV methods are in themselves compliant with the CA/Browser Forum Baseline Requirements for TLS server certificate issuance. Any CDV method that does not additionally meet the CA/Browser Forum's Baseline Requirements for TLS server certificate issuance must be used in conjunction with a method that satisfies the CA/Browser Forum's Baseline Requirements for TLS server certificate issuance. Such methods are indicated in their descriptions. 
+Not all CDV methods are in themselves compliant with the CA/Browser Forum Baseline Requirements for TLS server certificate issuance. Any CDV method that does not additionally meet the CA/Browser Forum's Baseline Requirements for TLS server certificate issuance must be used in conjunction with a method that satisfies the CA/Browser Forums Baseline Requirements for TLS server certificate issuance. Such methods are indicated in their descriptions. 
 
 
 
