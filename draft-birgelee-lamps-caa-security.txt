@@ -79,7 +79,7 @@ Table of Contents
    1.  Introduction
    2.  Conventions and Definitions
    3.  CAA "security" Tag Protection
-   4.  High-Security-Validation CAA Record Syntax
+   4.  Security CAA Record Syntax
    5.  Well-known Properties
    6.  Permissible Methods
    7.  Permissible Options
@@ -150,21 +150,25 @@ Table of Contents
    adversary to downgrade validation to use a non-high-security method
    and undermine the security properties of the "security" tag.
 
-4.  High-Security-Validation CAA Record Syntax
+4.  Security CAA Record Syntax
 
-   The flags field of the security tag MUST have the critical bit set.
+   The flags field of the security tag MUST have the critical bit set in
+   the flags byte of the CAA record.
+
+   The "security" tag MUST have the tag field of the CAA record be the
+   word "security".
 
    A single domain CANNOT have multiple "security" tags specified.  A
-   domain's entire cryptographic domain validaton policy MUST be encoded
-   into a single "security" tag.  If a CA finds a domain that has
-   multiple "security" CAA tags at the same FQDN, the CA MUST block
+   domain's entire cryptographic domain validation policy MUST be
+   encoded into a single "security" tag.  If a CA finds a domain that
+   has multiple "security" CAA tags at the same FQDN, the CA MUST block
    issuance.
 
    The value field of the "security" tag MUST be one of three values
 
    1.  an empty string.
 
-   2.  entierly whitespace.
+   2.  entirely whitespace.
 
    3.  a property_list as defined in this document.
 
@@ -180,10 +184,10 @@ Table of Contents
 
    <property_name>[whitespace][(property_list)]
 
-   The optional property_list spcified in parenthesis after each
-   property conatins parameters associated with that property.
+   The optional property_list specified in parenthesis after each
+   property contains parameters associated with that property.
 
-   A property_list can be abitrarily long.  Whitespace between
+   A property_list can be arbitrarily long.  Whitespace between
    properties is ignored. properties are comma-separated. property_lists
    MUST NOT be empty (i.e., property_lists must have at least one
    property).  All properties specified in a property_list MUST be
@@ -215,7 +219,7 @@ Table of Contents
 
    The top-level property_list MAY contain additional properties and a
    CA MAY proceed with issuance even if it does not understand these
-   additonal properties.  Subsiquent RFCs MAY standardize properties
+   additional properties.  Subsequent RFCs MAY standardize properties
 
 6.  Permissible Methods
 
@@ -246,7 +250,7 @@ Table of Contents
        using TCP port 443 where the server authenticates with an
        existing publicly-trusted valid certificate covering the domain
        in question.  The certificate cannot be self-signed or expired.
-       This method MAY be directly satisfied while a CA is perfomring
+       This method MAY be directly satisfied while a CA is performing
        the "Agreed-Upon Change to Website v2" domain control validation
        method specified in the the CA/Browser Forum's Baseline
        Requirements for the Issuance and Management of Publicly‐Trusted
@@ -258,12 +262,12 @@ Table of Contents
        so long as either 1) the connection initiated to port 80 serves a
        redirect to the same domain name over HTTPS at port 443 and the
        connection to the domain at port 443 servers a valid, trusted
-       certificate or 2) in additon to contacting the domain over port
+       certificate or 2) in addition to contacting the domain over port
        80 the CA also contacts the domain over port 443 using HTTPS and
        the connection is established with a valid, trusted certificate
        and the same challenge value is observed.  Operators of security-
        critical domains MAY choose not to permit this method since,
-       unlike other cryptographic domain validaiton methods specified in
+       unlike other cryptographic domain validation methods specified in
        this document, its security relies on no malicious certificates
        existing for a domain at time of the creation of the "security"
        tag in the domain's policy.
@@ -306,8 +310,12 @@ Table of Contents
        Publicly‐Trusted TLS Server Certificates.
 
    In the event that *no "methods" property specified in the top-level
-   property_list* All validation methods specified in thie document are
-   accepted.
+   property_list,* all methods specified in this document are acceptable
+   as well as cryptographic domain validation defined in future RFCs.
+   Future RFCs MAY specify additional methods for cryptographic domain
+   validation so long as they satisfy the properties of cryptographic
+   domain validation (i.e., robust against global man-in-the-middle
+   adversaries).
 
 7.  Permissible Options
 
@@ -382,7 +390,7 @@ Table of Contents
    falling back on alternative validation methods.  This attack vector
    is mitigated by the diversity of different methods available to
    domain owners for validating domain ownership using "security" CAA
-   records.  A domain owner may use an alternate method to satsify the
+   records.  A domain owner may use an alternate method to satisfy the
    "security" CAA record.  In the event that a domain owner truly cannot
    satisfy any cryptographic domain validation method, the domain owner
    can still mitigate this attack by removing the "security" CAA record,
