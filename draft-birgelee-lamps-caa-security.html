@@ -6,22 +6,21 @@
 <meta content="initial-scale=1.0" name="viewport">
 <title>CAA Security Tag for Cryptographic Domain Validation</title>
 <meta content="Henry Birge-Lee" name="author">
-<meta content="
-       TODO Abstract 
-    " name="description">
-<meta content="xml2rfc 3.23.2" name="generator">
-<meta content="next generation" name="keyword">
-<meta content="unicorn" name="keyword">
-<meta content="sparkling distributed ledger" name="keyword">
+<meta content='
+       CAA "security" tags are a type of CAA record (defined in RFC 6844) with the critical flag set that specify that for a certificate to be issued, the issuance process must be conducted in a manner that has cryptographic guarantees and does not rely on plain-text network connections. Cryptographic issuance procedures are authenticated and resilient against attacks by both on and off path network attackers which may be between the CA and the domain contained in the certificate. This document defines the syntax of "security" CAA records as well as acceptable means for validating domains in a cryptographic manner. 
+    ' name="description">
+<meta content="xml2rfc 3.24.0" name="generator">
+<meta content="PKI" name="keyword">
+<meta content="CAA" name="keyword">
 <meta content="draft-birgelee-lamps-caa-security-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.23.2
+  xml2rfc 3.24.0
     Python 3.12.7
     ConfigArgParse 1.7
     google-i18n-address 3.1.1
     intervaltree 3.1.0
     Jinja2 3.1.4
-    lxml 4.9.4
+    lxml 5.3.0
     platformdirs 4.3.6
     pycountry 22.3.5
     PyYAML 6.0.1
@@ -1079,11 +1078,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">CAA Security Tag</td>
-<td class="right">October 2024</td>
+<td class="right">November 2024</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Birge-Lee</td>
-<td class="center">Expires 2 May 2025</td>
+<td class="center">Expires 14 May 2025</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1096,12 +1095,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-birgelee-lamps-caa-security-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2024-10-29" class="published">29 October 2024</time>
+<time datetime="2024-11-10" class="published">10 November 2024</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Experimental</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-05-02">2 May 2025</time></dd>
+<dd class="expires"><time datetime="2025-05-14">14 May 2025</time></dd>
 <dt class="label-authors">Author:</dt>
 <dd class="authors">
 <div class="author">
@@ -1114,7 +1113,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <h1 id="title">CAA Security Tag for Cryptographic Domain Validation</h1>
 <section id="section-abstract">
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
-<p id="section-abstract-1">TODO Abstract<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+<p id="section-abstract-1">CAA "security" tags are a type of CAA record (defined in RFC 6844) with the critical flag set that specify that for a certificate to be issued, the issuance process must be conducted in a manner that has cryptographic guarantees and does not rely on plain-text network connections. Cryptographic issuance procedures are authenticated and resilient against attacks by both on and off path network attackers which may be between the CA and the domain contained in the certificate. This document defines the syntax of "security" CAA records as well as acceptable means for validating domains in a cryptographic manner.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
 </section>
 <section class="note rfcEditorRemove" id="section-note.1">
       <h2 id="name-about-this-document">
@@ -1151,7 +1150,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 2 May 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 14 May 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1187,19 +1186,28 @@ svg :is([fill="white"], [fill^="#fff"]) {
             <p id="section-toc.1-1.2.1" class="keepWithNext"><a href="#section-2" class="auto internal xref">2</a>.  <a href="#name-conventions-and-definitions" class="internal xref">Conventions and Definitions</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3">
-            <p id="section-toc.1-1.3.1" class="keepWithNext"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
+            <p id="section-toc.1-1.3.1" class="keepWithNext"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-caa-security-tag-protection" class="internal xref">CAA "security" Tag Protection</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4">
-            <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
+            <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-high-security-validation-ca" class="internal xref">High-Security-Validation CAA Record Syntax</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5">
-            <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-normative-references" class="internal xref">Normative References</a></p>
+            <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-well-known-properties" class="internal xref">Well-known Properties</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
-            <p id="section-toc.1-1.6.1"><a href="#appendix-A" class="auto internal xref"></a><a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
+            <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
-            <p id="section-toc.1-1.7.1"><a href="#appendix-B" class="auto internal xref"></a><a href="#name-authors-address" class="internal xref">Author's Address</a></p>
+            <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8">
+            <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref">8</a>.  <a href="#name-normative-references" class="internal xref">Normative References</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9">
+            <p id="section-toc.1-1.9.1"><a href="#appendix-A" class="auto internal xref"></a><a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10">
+            <p id="section-toc.1-1.10.1"><a href="#appendix-B" class="auto internal xref"></a><a href="#name-authors-address" class="internal xref">Author's Address</a></p>
 </li>
         </ul>
 </nav>
@@ -1210,7 +1218,8 @@ svg :is([fill="white"], [fill^="#fff"]) {
       <h2 id="name-introduction">
 <a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
       </h2>
-<p id="section-1-1">TODO Introduction<a href="#section-1-1" class="pilcrow">¶</a></p>
+<p id="section-1-1">A "security" CAA record is compliant with RFC 6844 and puts restrictions on the circumstances under which a CA can sign a certificate for a given domain. A “security” CAA record on a domain implies that validation for this domain must be done in a manner that offers security against network adversaries even if an adversary is capable of intercepting and/or modifying domain-control-validation-related communication between the CA and the domain being validated. Issuance of a certificate to a domain with a "security" CAA tag <span class="bcp14">MUST</span> follow one of the specified Cryptographic Domain Validation (CDV) methods outlined in this document or future extensions. CDV methods <span class="bcp14">MUST</span> rely on cryptographic protocols (like DNSSEC or DoH/DoT) that offer security properties even in the presence of man-in-the-middle adversaries that can intercept any communication which occurs over the public Internet.<a href="#section-1-1" class="pilcrow">¶</a></p>
+<p id="section-1-2">Not all CDV methods are in themselves compliant with the CA/Browser Forum Baseline Requirements for TLS server certificate issuance. Any CDV method that does not additionally meet the CA/Browser Forums Baseline Requirements for TLS server certificate issuance must be used in conjunction with a method that satisfies the CA/Browser Forums Baseline Requirements for TLS server certificate issuance. Such methods are indicated in their descriptions.<a href="#section-1-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="conventions-and-definitions">
@@ -1224,26 +1233,73 @@ described in BCP 14 <span>[<a href="#RFC2119" class="cite xref">RFC2119</a>]</s
 appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="security-considerations">
+<div id="caa-security-tag-protection">
 <section id="section-3">
-      <h2 id="name-security-considerations">
-<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
+      <h2 id="name-caa-security-tag-protection">
+<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-caa-security-tag-protection" class="section-name selfRef">CAA "security" Tag Protection</a>
       </h2>
-<p id="section-3-1">TODO Security<a href="#section-3-1" class="pilcrow">¶</a></p>
+<p id="section-3-1">A "security" CAA tag <span class="bcp14">SHOULD</span> be protected with a valid DNSSEC signature chain going back to the ICANN DNSSEC root or hosted on authoritative DNS servers that CAs have authenticated communication channels with. Any High-security-validation CAA record not protected by such a signature <span class="bcp14">MAY</span> not benefit from the security properties outlined in this document. If it is not possible to have a DNSSEC signature chain back to the ICANN root, High-Security-Validation CAA records <span class="bcp14">SHOULD</span> alternately be hosted in an authoritative DNS resolver that supports recursive-to-authoritative DNS over TLS or DNS over HTTPS per RFC 9539. CAs <span class="bcp14">SHOULD</span> also require recursive-to-authoritative DNS over TLS or DNS over HTTPS communication (and not permit standard unencrypted DNS connections) for DNS providers that host High-Security-Validation CAA records. This prevents downgrade attacks where an adversary attempts to interfere with the establishment of a DNS over TLS or DNS over HTTPS encrypted channel and cause a fallback to unencrypted DNS over UDP/TCP.<a href="#section-3-1" class="pilcrow">¶</a></p>
+<p id="section-3-2">Serving "security" CAA records over authenticated DNS channels or using authenticated DNS records (i.e., DNSSEC) is critical to the effectiveness of the records because a "security" CAA record not protected by authenticated DNS may be suppressed by an adversary that can manipulate DNS responses. This could potentially allow the adversary to downgrade validation to use a non-high-security method and undermine the security properties of the "security" tag.<a href="#section-3-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="high-security-validation-caa-record-syntax">
+<section id="section-4">
+      <h2 id="name-high-security-validation-ca">
+<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-high-security-validation-ca" class="section-name selfRef">High-Security-Validation CAA Record Syntax</a>
+      </h2>
+<p id="section-4-1">The flags field of the security tag <span class="bcp14">MUST</span> have the critical bit set.<a href="#section-4-1" class="pilcrow">¶</a></p>
+<p id="section-4-2">A single domain CANNOT have multiple "security" tags specified. A domain's entire cryptographic domain validaton policy <span class="bcp14">MUST</span> be encoded into a single "security" tag. If a CA finds a domain that has multiple "security" CAA tags at the same FQDN, the CA <span class="bcp14">MUST</span> block issuance.<a href="#section-4-2" class="pilcrow">¶</a></p>
+<p id="section-4-3">The value field of the "security" tag <span class="bcp14">MUST</span> be one of three values<a href="#section-4-3" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-4-4">
+<li id="section-4-4.1">
+          <p id="section-4-4.1.1">an empty string.<a href="#section-4-4.1.1" class="pilcrow">¶</a></p>
+</li>
+        <li id="section-4-4.2">
+          <p id="section-4-4.2.1">entierly whitespace.<a href="#section-4-4.2.1" class="pilcrow">¶</a></p>
+</li>
+        <li id="section-4-4.3">
+          <p id="section-4-4.3.1">a property_list as defined in this document.<a href="#section-4-4.3.1" class="pilcrow">¶</a></p>
+</li>
+      </ol>
+<p id="section-4-5">Values 1. and 2. <span class="bcp14">MUST</span> be treated identically as an empty value field.<a href="#section-4-5" class="pilcrow">¶</a></p>
+<p id="section-4-6">A property_list is defined by the following syntax<a href="#section-4-6" class="pilcrow">¶</a></p>
+<p id="section-4-7"><code>[whitespace]&lt;property&gt;[whitespace][,[whitespace]&lt;property&gt;[whitespace] ...]</code><a href="#section-4-7" class="pilcrow">¶</a></p>
+<p id="section-4-8">A property_list can be abitrarily long. Whitespace between properties is ignored. properties are comma-separated. property_lists cannot be empty (i.e., must have at least one property).<a href="#section-4-8" class="pilcrow">¶</a></p>
+<p id="section-4-9">A property is defined as<a href="#section-4-9" class="pilcrow">¶</a></p>
+<p id="section-4-10"><code>&lt;property_name&gt;[whitespace][(property_list)]</code><a href="#section-4-10" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="well-known-properties">
+<section id="section-5">
+      <h2 id="name-well-known-properties">
+<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-well-known-properties" class="section-name selfRef">Well-known Properties</a>
+      </h2>
+<ol start="1" type="1" class="normal type-1" id="section-5-1">
+<li id="section-5-1.1">
+          <p id="section-5-1.1.1"><strong>methods</strong> If specified, this property <span class="bcp14">MUST</span> have parameters listing various cryptographic domain validation methods that can be used to validate that particular domain. A CA <span class="bcp14">MUST</span> only use one of the methods specified in the parameters value_list to perform cryptographic domain validation. If there is no method specified that the CA is capable of complying with, the CA <span class="bcp14">MUST</span> deny issuance.<a href="#section-5-1.1.1" class="pilcrow">¶</a></p>
+</li>
+      </ol>
+</section>
+</div>
+<div id="security-considerations">
+<section id="section-6">
+      <h2 id="name-security-considerations">
+<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
+    </h2>
 </section>
 </div>
 <div id="iana-considerations">
-<section id="section-4">
+<section id="section-7">
       <h2 id="name-iana-considerations">
-<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
+<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
       </h2>
-<p id="section-4-1">This document has no IANA actions.<a href="#section-4-1" class="pilcrow">¶</a></p>
+<p id="section-7-1">This document has no IANA actions.<a href="#section-7-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="sec-normative-references">
-<section id="section-5">
+<section id="section-8">
       <h2 id="name-normative-references">
-<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
+<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
       </h2>
 <dl class="references">
 <dt id="RFC2119">[RFC2119]</dt>
