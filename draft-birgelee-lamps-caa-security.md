@@ -27,6 +27,26 @@ author:
     fullname: Henry Birge-Lee
     organization: Princeton University
     email: birgelee@princeton.edu
+ -
+    fullname: Grace Cimaszewski
+    organization: Princeton University
+    email: gcimaszewski@princeton.edu
+ -
+    fullname: Cyrill E. Krähenbühl
+    organization: Princeton University
+    email: cyrill.k@princeton.edu
+ -
+    fullname: Liang Wang
+    organization: Princeton University
+    email: lw19@princeton.edu
+ -
+    fullname: Aaron Gable
+    organization: ISRG
+    email: aaron@letsencrypt.org
+ -
+    fullname: Prateek Mittal
+    organization: Princeton University
+    email: pmittal@princeton.edu
 
 normative:
 
