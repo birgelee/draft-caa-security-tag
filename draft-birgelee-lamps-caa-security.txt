@@ -3,9 +3,15 @@
 
 
 Limited Additional Mechanisms for PKIX and SMIME            H. Birge-Lee
-Internet-Draft                                      Princeton University
-Intended status: Experimental                           10 November 2024
-Expires: 14 May 2025
+Internet-Draft                                            G. Cimaszewski
+Intended status: Experimental                           C. E. Krähenbühl
+Expires: 18 May 2025                                             L. Wang
+                                                    Princeton University
+                                                                A. Gable
+                                                                    ISRG
+                                                               P. Mittal
+                                                    Princeton University
+                                                        14 November 2024
 
 
           CAA Security Tag for Cryptographic Domain Validation
@@ -58,7 +64,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 14 May 2025.
+   This Internet-Draft will expire on 18 May 2025.
 
 Copyright Notice
 
@@ -89,7 +95,7 @@ Table of Contents
    11. IANA Considerations
    12. Normative References
    Acknowledgments
-   Author's Address
+   Authors' Addresses
 
 1.  Introduction
 
@@ -433,8 +439,33 @@ Acknowledgments
 
    TODO acknowledge.
 
-Author's Address
+Authors' Addresses
 
    Henry Birge-Lee
    Princeton University
    Email: birgelee@princeton.edu
+
+
+   Grace Cimaszewski
+   Princeton University
+   Email: gcimaszewski@princeton.edu
+
+
+   Cyrill E. Krähenbühl
+   Princeton University
+   Email: cyrill.k@princeton.edu
+
+
+   Liang Wang
+   Princeton University
+   Email: lw19@princeton.edu
+
+
+   Aaron Gable
+   ISRG
+   Email: aaron@letsencrypt.org
+
+
+   Prateek Mittal
+   Princeton University
+   Email: pmittal@princeton.edu
