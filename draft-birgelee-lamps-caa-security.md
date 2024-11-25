@@ -59,9 +59,9 @@ informative:
 
 --- abstract
 
-CAA "security" tags are a type of CAA record (defined in {{RFC8659}}) with the critical flag set that specify that for a certificate to be issued, the issuance process must be conducted in a manner that is robust against global man-in-the-middle adversaries by leveraging authenticated communication between a CA and a domain.
-Cryptographic domain validation procedures are authenticated and resilient against attacks by both on-path and off-path network attackers which may be located between the CA and the network resources related to the domain contained in the certificate.
-This document defines the syntax of "security" CAA records as well as acceptable means for validating domains in a cryptographic manner.
+Cryptographic domain validation procedures leverage authenticated communication channels to ensure resilience against attacks by both on-path and off-path network attackers which may be located between the CA and the network resources related to the domain contained in the certificate.
+Domain owners can leverage "security" Property Tags specified in CAA records (defined in {{RFC8659}}) with the critical flag set, to ensure that CAs perform cryptographic domain validation during their issuance procedure, hence defending against global man-in-the-middle adversaries.
+This document defines the syntax of the CAA "security" Property as well as acceptable means for cryptographic domain validation procedures.
 
 
 --- middle
