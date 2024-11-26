@@ -165,7 +165,7 @@ Future RFCs MAY specify additional methods for cryptographic domain validation s
 
 The following options MAY used as parameters in the options or options-critical property in the top-level property-list.
 
-1. **authenticated-policy-retrival:** This option signifies to a CA that it MUST retrieve a domain's CAA security Property and any associated domain-owner identity (e.g., identifiers used for known-account-specifier and private-key-control) using authenticated DNS lookups or other authenticated channels.
+1. **authenticated-policy-retrieval:** This option signifies to a CA that it MUST retrieve a domain's CAA security Property and any associated domain-owner identity (e.g., identifiers used for known-account-specifier and private-key-control) using authenticated DNS lookups or other authenticated channels.
 If a CA finds this option as a parameter to the options-critical property and the CAA security Property was not retrieved using authenticated DNS lookups, the CA MUST NOT issue a certificate for that domain.
 
 Additionally, a CA MAY choose to honor its own non-standardized options that do not need to be supported by other CAs or the IETF.
