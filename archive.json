@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-11-26T01:12:38.043938+00:00",
+  "timestamp": "2024-11-28T01:13:38.303571+00:00",
   "repo": "birgelee/draft-caa-security-tag",
   "labels": [
     {
@@ -50,5 +50,34 @@
     }
   ],
   "issues": [],
-  "pulls": []
+  "pulls": [
+    {
+      "number": 1,
+      "id": "PR_kwDONHkCO86DH5mc",
+      "title": "Add ABNF syntax description and adjust terminology",
+      "url": "https://github.com/birgelee/draft-caa-security-tag/pull/1",
+      "state": "MERGED",
+      "author": "cyrill-k",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "- Describe the security Property Value using ABNF syntax description, analogous to the syntax description of the issue Property Value in CAA RFC 8659\r\n- Add proper normative references for relevant RFCs (and update reference to obsolete RFC)\r\n- Slight rewrite/restructuring of abstract\r\n- Switch to one-sentence-per-line format to simplify working with git\r\n- Adjust terminology to more closely follow CAA RFC 8659",
+      "createdAt": "2024-11-26T03:26:39Z",
+      "updatedAt": "2024-11-26T17:08:27Z",
+      "baseRepository": "birgelee/draft-caa-security-tag",
+      "baseRefName": "main",
+      "baseRefOid": "c51860dbcf30eb5dc9c639aaafec9f27bd3cf779",
+      "headRepository": "cyrill-k/draft-caa-security-tag",
+      "headRefName": "review-00",
+      "headRefOid": "7531c2976b64fd5e39a8b2dd4f036f4b1d6943e1",
+      "closedAt": "2024-11-26T17:08:26Z",
+      "mergedAt": "2024-11-26T17:08:26Z",
+      "mergedBy": "birgelee",
+      "mergeCommit": {
+        "oid": "b267b5165e97eeb089b7c0beccb9c9125cc1b416"
+      },
+      "comments": [],
+      "reviews": []
+    }
+  ]
 }
