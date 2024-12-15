@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-12-12T01:14:29.533786+00:00",
+  "timestamp": "2024-12-15T01:19:57.960146+00:00",
   "repo": "birgelee/draft-caa-security-tag",
   "labels": [
     {
@@ -76,6 +76,58 @@
       "mergeCommit": {
         "oid": "b267b5165e97eeb089b7c0beccb9c9125cc1b416"
       },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 2,
+      "id": "PR_kwDONHkCO86E8X3I",
+      "title": "rename property -> attribute and allow for nested attribute lists",
+      "url": "https://github.com/birgelee/draft-caa-security-tag/pull/2",
+      "state": "OPEN",
+      "author": "cyrill-k",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-12-12T02:09:31Z",
+      "updatedAt": "2024-12-12T02:09:31Z",
+      "baseRepository": "birgelee/draft-caa-security-tag",
+      "baseRefName": "main",
+      "baseRefOid": "b267b5165e97eeb089b7c0beccb9c9125cc1b416",
+      "headRepository": "cyrill-k/draft-caa-security-tag",
+      "headRefName": "fix-syntax",
+      "headRefOid": "d490a2aabd8e7eac3f4fed6865caa74620d97921",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 3,
+      "id": "PR_kwDONHkCO86E8aQk",
+      "title": "Restructuring",
+      "url": "https://github.com/birgelee/draft-caa-security-tag/pull/3",
+      "state": "OPEN",
+      "author": "cyrill-k",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "- Reorganized structure and added more nested (sub-)headings\r\n- Added discussion on interaction between security Properties and other Properties\r\n- Now allows for multiple security Properties but requires a CA to be compliant with all of them\r\n- Added todo on specifying authenticated tunnels, possibly using RFC 9539 https://datatracker.ietf.org/doc/rfc9539/\r\n\r\nSuggest to first merge #2 to reduce the number of changes in this PR",
+      "createdAt": "2024-12-12T02:16:11Z",
+      "updatedAt": "2024-12-12T02:16:12Z",
+      "baseRepository": "birgelee/draft-caa-security-tag",
+      "baseRefName": "main",
+      "baseRefOid": "b267b5165e97eeb089b7c0beccb9c9125cc1b416",
+      "headRepository": "cyrill-k/draft-caa-security-tag",
+      "headRefName": "restructuring",
+      "headRefOid": "9a91c30cfd4126de4a5fb2f4fa13ba8480f0a11f",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
       "comments": [],
       "reviews": []
     }
