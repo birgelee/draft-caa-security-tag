@@ -5,13 +5,13 @@
 Limited Additional Mechanisms for PKIX and SMIME            H. Birge-Lee
 Internet-Draft                                            G. Cimaszewski
 Intended status: Experimental                           C. E. Krähenbühl
-Expires: 30 May 2025                                             L. Wang
+Expires: 21 June 2025                                            L. Wang
                                                     Princeton University
                                                                 A. Gable
                                                                     ISRG
                                                                P. Mittal
                                                     Princeton University
-                                                        26 November 2024
+                                                        18 December 2024
 
 
           CAA Security Tag for Cryptographic Domain Validation
@@ -65,7 +65,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 30 May 2025.
+   This Internet-Draft will expire on 21 June 2025.
 
 Copyright Notice
 
@@ -86,7 +86,7 @@ Table of Contents
    1.  Introduction
    2.  Conventions and Definitions
    3.  CAA security Property
-   4.  Well-known Properties
+   4.  Well-known Attributes
    5.  Permissible Methods
    6.  Permissible Options
    7.  Applicability
@@ -140,66 +140,64 @@ Table of Contents
    The CAA security Property Value has the following sub-syntax
    (specified in ABNF as per [RFC5234]).
 
-   security-value = *WSP [property_list] *WSP
+   security-value = *WSP [attribute-list] *WSP
 
-   property-list = (property *WSP "," *WSP property-list) / property
+   attribute-list = (attribute *WSP "," *WSP attribute-list) / attribute
 
-   property = property-name *WSP ["(" *WSP parameter-list *WSP ")"]
+   attribute = attribute-name *WSP ["(" *WSP attribute-list *WSP ")"]
 
-   property-name = character-set *character-set
-
-   parameter-list = (parameter *WSP "," *WSP parameter-list) / parameter
-
-   parameter = character-set *character-set
+   attribute-name = character-set *character-set
 
    character-set = ALPHA / DIGIT / ":" / "_" / "-"
 
    Hence, the security Property Value can either be empty or entirely
-   whitespace, or contain a list of comma-separated properties with an
-   optional list of comma-separated parameters associated with each
-   property in parentheses after the property.  Properties and
-   parameters MUST consist only of lowercase letters (a-z), uppercase
-   letters (A-Z), numbers (0-9), colon (:), underscore (_), and hyphen
-   (-), and are case sensitive.
+   whitespace, or contain a list of comma-separated attributes.  Each
+   attribute has an optional list of comma-separated (sub-)attributes
+   associated with the attribute in parentheses after the attribute.
+   These attributes can in turn be associated with sub-attributes,
+   allowing the specification of nested attribute lists.  Attributes
+   MUST consist only of lowercase letters (a-z), uppercase letters
+   (A-Z), numbers (0-9), colon (:), underscore (_), and hyphen (-), and
+   are case sensitive.
 
-   All properties specified in a property-list MUST be unique.  A
-   property-list MUST NOT have two properties with the same name
-   specified even if they contain different parameters.  If parameters
-   are specified, the parameter list MUST NOT be empty, i.e.,
-   "property()" is not a valid CAA security Property Value.
+   All attributes specified in an attribute-list MUST be unique.  An
+   attribute-list MUST NOT have two attributes with the same name
+   specified even if they contain different sub-attributes.  If sub-
+   attributes are specified, the sub-attribute list MUST NOT be empty,
+   i.e., "attribute()" is not a valid CAA security Property Value.
 
-4.  Well-known Properties
+4.  Well-known Attributes
 
-   The top-level property-list MAY contain the following properties.
+   The top-level attribute-list MAY contain the following attributes.
 
-   1.  *methods:* If specified, this property MUST have parameters
+   1.  *methods:* If specified, this attribute MUST have sub-attributes
        listing various cryptographic domain validation methods that can
        be used to validate that particular domain.  A CA MUST use one of
-       the methods specified in the methods parameters to perform
+       the methods specified in the methods sub-attributes to perform
        cryptographic domain validation.  If there is no method specified
        that the CA is capable of complying with, the CA MUST deny
        issuance.
 
-   2.  *options:* If specified, this property MUST have parameters
+   2.  *options:* If specified, this attribute MUST have sub-attributes
        listing various options.  A CA SHOULD try to honor any option
        specified in this list.  If a CA does not understand an option or
        does not have that option implemented the, CA MAY proceed with
        issuance.
 
-   3.  *options-critical:* If specified, this property MUST have
-       parameters listing various options.  To proceed with issuance, a
+   3.  *options-critical:* If specified, this attribute MUST have sub-
+       attributes listing various options.  To proceed with issuance, a
        CA MUST understand and implement all options specified in the
-       options-critical parameters
+       options-critical sub-attributes
 
-   The top-level property-list MAY contain additional properties and a
+   The top-level attribute-list MAY contain additional attributes and a
    CA MAY proceed with issuance even if it does not understand these
-   additional properties.  Subsequent RFCs MAY standardize additional
-   properties.
+   additional attributes.  Subsequent RFCs MAY standardize additional
+   attributes.
 
 5.  Permissible Methods
 
-   The following properties MAY be specified as parameters of the
-   methods property.  Each method specifies particular aspects of
+   The following attributes MAY be specified as sub-attributes of the
+   methods attributes.  Each method specifies particular aspects of
    certificate issuance that MUST be satisfied for a certificate to be
    issued using that method.  While some methods entail the use of CA/
    Browser Forum-compliant domain control validation methods, others do
@@ -251,10 +249,10 @@ Table of Contents
        this method 1) there MUST exist a unique identifier for a CA
        subscriber account that is communicated with the CA out-of-band,
        over authenticated DNS lookups, or in another manner that is
-       immune to man-in-the-middle adversaries 2) the CA may only issue
-       a certificate to an applicant that has authenticated itself to
-       the CA as having access to that specified subscriber account.  A
-       CA does not have permission to issue under this method unless
+       immune to man-in-the-middle adversaries, and 2) the CA may only
+       issue a certificate to an applicant that has authenticated itself
+       to the CA as having access to that specified subscriber account.
+       A CA does not have permission to issue under this method unless
        both of these criteria are met.  Once these criteria have been
        met, the CA MUST additionally perform a validation method that is
        compliant with the Baseline Requirements for the Issuance and
@@ -284,26 +282,26 @@ Table of Contents
        the Baseline Requirements for the Issuance and Management of
        Publicly-Trusted TLS Server Certificates.
 
-   In the event that *no methods property specified in the top-level
-   property-list,* all methods specified in this document are acceptable
-   as well as cryptographic domain validation methods defined in future
-   RFCs.  Future RFCs MAY specify additional methods for cryptographic
-   domain validation so long as they satisfy the properties of
-   cryptographic domain validation (i.e., robustness against global man-
-   in-the-middle adversaries).
+   In the event that *no methods attribute is specified in the top-level
+   attribute-list,* all methods specified in this document are
+   acceptable as well as cryptographic domain validation methods defined
+   in future RFCs.  Future RFCs MAY specify additional methods for
+   cryptographic domain validation so long as they satisfy the
+   properties of cryptographic domain validation (i.e., robustness
+   against global man-in-the-middle adversaries).
 
 6.  Permissible Options
 
-   The following options MAY used as parameters in the options or
-   options-critical property in the top-level property-list.
+   The following options MAY used as sub-attributes in the options or
+   options-critical attributes in the top-level attribute-list.
 
    1.  *authenticated-policy-retrieval:* This option signifies to a CA
        that it MUST retrieve a domain's CAA security Property and any
        associated domain-owner identity (e.g., identifiers used for
        known-account-specifier and private-key-control) using
        authenticated DNS lookups or other authenticated channels.  If a
-       CA finds this option as a parameter to the options-critical
-       property and the CAA security Property was not retrieved using
+       CA finds this option as a sub-attribute in the options-critical
+       attribute and the CAA security Property was not retrieved using
        authenticated DNS lookups, the CA MUST NOT issue a certificate
        for that domain.
 

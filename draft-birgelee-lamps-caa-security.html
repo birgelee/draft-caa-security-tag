@@ -16,21 +16,21 @@
 Domain owners can leverage "security" Property Tags specified in CAA records (defined in  ) with the critical flag set, to ensure that CAs perform cryptographic domain validation during their issuance procedure, hence defending against global man-in-the-middle adversaries.
 This document defines the syntax of the CAA security Property as well as acceptable means for cryptographic domain validation procedures. 
     ' name="description">
-<meta content="xml2rfc 3.24.0" name="generator">
+<meta content="xml2rfc 3.25.0" name="generator">
 <meta content="PKI" name="keyword">
 <meta content="CAA" name="keyword">
 <meta content="draft-birgelee-lamps-caa-security-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.24.0
-    Python 3.12.7
+  xml2rfc 3.25.0
+    Python 3.12.8
     ConfigArgParse 1.7
     google-i18n-address 3.1.1
     intervaltree 3.1.0
     Jinja2 3.1.4
     lxml 5.3.0
     platformdirs 4.3.6
-    pycountry 22.3.5
-    PyYAML 6.0.1
+    pycountry 24.6.1
+    PyYAML 6.0.2
     requests 2.32.3
     setuptools 70.3.0
     wcwidth 0.2.13
@@ -542,7 +542,11 @@ figcaption, caption {
   }
   pre, svg {
     display: inline-block;
-    overflow-x: auto;
+    /* In the horizontal direction, sometimes people make over-sized figures.
+       Scrollbars for those is therefore necessary: auto adds them as necessary..
+       In the vertical direction, the line-height can combine with the font
+       asender/descender height to produce scrollbars: hidden avoids that. */
+    overflow: auto hidden;
   }
   pre {
     max-width: 100%;
@@ -1048,11 +1052,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">CAA Security Tag</td>
-<td class="right">November 2024</td>
+<td class="right">December 2024</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Birge-Lee, et al.</td>
-<td class="center">Expires 30 May 2025</td>
+<td class="center">Expires 21 June 2025</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1065,12 +1069,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-birgelee-lamps-caa-security-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2024-11-26" class="published">26 November 2024</time>
+<time datetime="2024-12-18" class="published">18 December 2024</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Experimental</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-05-30">30 May 2025</time></dd>
+<dd class="expires"><time datetime="2025-06-21">21 June 2025</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1142,7 +1146,7 @@ This document defines the syntax of the CAA security Property as well as accepta
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 30 May 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 21 June 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1181,7 +1185,7 @@ This document defines the syntax of the CAA security Property as well as accepta
             <p id="section-toc.1-1.3.1" class="keepWithNext"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-caa-security-property" class="internal xref">CAA security Property</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4">
-            <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-well-known-properties" class="internal xref">Well-known Properties</a></p>
+            <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-well-known-attributes" class="internal xref">Well-known Attributes</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5">
             <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-permissible-methods" class="internal xref">Permissible Methods</a></p>
@@ -1249,44 +1253,44 @@ appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶<
 <p id="section-3-1">The CAA security Property Tag <span class="bcp14">MUST</span> be "security" and the flags field of a CAA record containing the security Property <span class="bcp14">MUST</span> have the critical bit set.
 In this document, we refer to a CAA record with these characteristics as a <strong>security CAA record</strong>.<a href="#section-3-1" class="pilcrow">¶</a></p>
 <p id="section-3-2">The CAA security Property Value has the following sub-syntax (specified in ABNF as per <span>[<a href="#RFC5234" class="cite xref">RFC5234</a>]</span>).<a href="#section-3-2" class="pilcrow">¶</a></p>
-<p id="section-3-3">security-value = *WSP [property_list] *WSP<a href="#section-3-3" class="pilcrow">¶</a></p>
-<p id="section-3-4">property-list = (property *WSP "," *WSP property-list) / property<a href="#section-3-4" class="pilcrow">¶</a></p>
-<p id="section-3-5">property = property-name *WSP ["(" *WSP parameter-list *WSP ")"]<a href="#section-3-5" class="pilcrow">¶</a></p>
-<p id="section-3-6">property-name = character-set *character-set<a href="#section-3-6" class="pilcrow">¶</a></p>
-<p id="section-3-7">parameter-list = (parameter *WSP "," *WSP parameter-list) / parameter<a href="#section-3-7" class="pilcrow">¶</a></p>
-<p id="section-3-8">parameter = character-set *character-set<a href="#section-3-8" class="pilcrow">¶</a></p>
-<p id="section-3-9">character-set = ALPHA / DIGIT / ":" / "_" / "-"<a href="#section-3-9" class="pilcrow">¶</a></p>
-<p id="section-3-10">Hence, the security Property Value can either be empty or entirely whitespace, or contain a list of comma-separated properties with an optional list of comma-separated parameters associated with each property in parentheses after the property.
-Properties and parameters <span class="bcp14">MUST</span> consist only of lowercase letters (a-z), uppercase letters (A-Z), numbers (0-9), colon (:), underscore (_), and hyphen (-), and are case sensitive.<a href="#section-3-10" class="pilcrow">¶</a></p>
-<p id="section-3-11">All properties specified in a property-list <span class="bcp14">MUST</span> be unique.
-A property-list <span class="bcp14">MUST NOT</span> have two properties with the same name specified even if they contain different parameters.
-If parameters are specified, the parameter list <span class="bcp14">MUST NOT</span> be empty, i.e., "property()" is not a valid CAA security Property Value.<a href="#section-3-11" class="pilcrow">¶</a></p>
+<p id="section-3-3">security-value = *WSP [attribute-list] *WSP<a href="#section-3-3" class="pilcrow">¶</a></p>
+<p id="section-3-4">attribute-list = (attribute *WSP "," *WSP attribute-list) / attribute<a href="#section-3-4" class="pilcrow">¶</a></p>
+<p id="section-3-5">attribute = attribute-name *WSP ["(" *WSP attribute-list *WSP ")"]<a href="#section-3-5" class="pilcrow">¶</a></p>
+<p id="section-3-6">attribute-name = character-set *character-set<a href="#section-3-6" class="pilcrow">¶</a></p>
+<p id="section-3-7">character-set = ALPHA / DIGIT / ":" / "_" / "-"<a href="#section-3-7" class="pilcrow">¶</a></p>
+<p id="section-3-8">Hence, the security Property Value can either be empty or entirely whitespace, or contain a list of comma-separated attributes.
+Each attribute has an optional list of comma-separated (sub-)attributes associated with the attribute in parentheses after the attribute.
+These attributes can in turn be associated with sub-attributes, allowing the specification of nested attribute lists.
+Attributes <span class="bcp14">MUST</span> consist only of lowercase letters (a-z), uppercase letters (A-Z), numbers (0-9), colon (:), underscore (_), and hyphen (-), and are case sensitive.<a href="#section-3-8" class="pilcrow">¶</a></p>
+<p id="section-3-9">All attributes specified in an attribute-list <span class="bcp14">MUST</span> be unique.
+An attribute-list <span class="bcp14">MUST NOT</span> have two attributes with the same name specified even if they contain different sub-attributes.
+If sub-attributes are specified, the sub-attribute list <span class="bcp14">MUST NOT</span> be empty, i.e., "attribute()" is not a valid CAA security Property Value.<a href="#section-3-9" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="well-known-properties">
+<div id="well-known-attributes">
 <section id="section-4">
-      <h2 id="name-well-known-properties">
-<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-well-known-properties" class="section-name selfRef">Well-known Properties</a>
+      <h2 id="name-well-known-attributes">
+<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-well-known-attributes" class="section-name selfRef">Well-known Attributes</a>
       </h2>
-<p id="section-4-1">The top-level property-list <span class="bcp14">MAY</span> contain the following properties.<a href="#section-4-1" class="pilcrow">¶</a></p>
+<p id="section-4-1">The top-level attribute-list <span class="bcp14">MAY</span> contain the following attributes.<a href="#section-4-1" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-4-2">
 <li id="section-4-2.1">
-          <p id="section-4-2.1.1"><strong>methods:</strong> If specified, this property <span class="bcp14">MUST</span> have parameters listing various cryptographic domain validation methods that can be used to validate that particular domain.
-A CA <span class="bcp14">MUST</span> use one of the methods specified in the methods parameters to perform cryptographic domain validation.
+          <p id="section-4-2.1.1"><strong>methods:</strong> If specified, this attribute <span class="bcp14">MUST</span> have sub-attributes listing various cryptographic domain validation methods that can be used to validate that particular domain.
+A CA <span class="bcp14">MUST</span> use one of the methods specified in the methods sub-attributes to perform cryptographic domain validation.
 If there is no method specified that the CA is capable of complying with, the CA <span class="bcp14">MUST</span> deny issuance.<a href="#section-4-2.1.1" class="pilcrow">¶</a></p>
 </li>
         <li id="section-4-2.2">
-          <p id="section-4-2.2.1"><strong>options:</strong> If specified, this property <span class="bcp14">MUST</span> have parameters listing various options.
+          <p id="section-4-2.2.1"><strong>options:</strong> If specified, this attribute <span class="bcp14">MUST</span> have sub-attributes listing various options.
 A CA <span class="bcp14">SHOULD</span> try to honor any option specified in this list.
 If a CA does not understand an option or does not have that option implemented the, CA <span class="bcp14">MAY</span> proceed with issuance.<a href="#section-4-2.2.1" class="pilcrow">¶</a></p>
 </li>
         <li id="section-4-2.3">
-          <p id="section-4-2.3.1"><strong>options-critical:</strong> If specified, this property <span class="bcp14">MUST</span> have parameters listing various options.
-To proceed with issuance, a CA <span class="bcp14">MUST</span> understand and implement all options specified in the options-critical parameters<a href="#section-4-2.3.1" class="pilcrow">¶</a></p>
+          <p id="section-4-2.3.1"><strong>options-critical:</strong> If specified, this attribute <span class="bcp14">MUST</span> have sub-attributes listing various options.
+To proceed with issuance, a CA <span class="bcp14">MUST</span> understand and implement all options specified in the options-critical sub-attributes<a href="#section-4-2.3.1" class="pilcrow">¶</a></p>
 </li>
       </ol>
-<p id="section-4-3">The top-level property-list <span class="bcp14">MAY</span> contain additional properties and a CA <span class="bcp14">MAY</span> proceed with issuance even if it does not understand these additional properties.
-Subsequent RFCs <span class="bcp14">MAY</span> standardize additional properties.<a href="#section-4-3" class="pilcrow">¶</a></p>
+<p id="section-4-3">The top-level attribute-list <span class="bcp14">MAY</span> contain additional attributes and a CA <span class="bcp14">MAY</span> proceed with issuance even if it does not understand these additional attributes.
+Subsequent RFCs <span class="bcp14">MAY</span> standardize additional attributes.<a href="#section-4-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="permissible-methods">
@@ -1294,7 +1298,7 @@ Subsequent RFCs <span class="bcp14">MAY</span> standardize additional properties
       <h2 id="name-permissible-methods">
 <a href="#section-5" class="section-number selfRef">5. </a><a href="#name-permissible-methods" class="section-name selfRef">Permissible Methods</a>
       </h2>
-<p id="section-5-1">The following properties <span class="bcp14">MAY</span> be specified as parameters of the methods property.
+<p id="section-5-1">The following attributes <span class="bcp14">MAY</span> be specified as sub-attributes of the methods attributes.
 Each method specifies particular aspects of certificate issuance that <span class="bcp14">MUST</span> be satisfied for a certificate to be issued using that method.
 While some methods entail the use of CA/Browser Forum-compliant domain control validation methods, others do not entail CA/Browser Forum-compliant domain control validation and must be used in conjunction with a CA/Browser Forum-compliant domain control validation method to permit certificate issuance.<a href="#section-5-1" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-5-2">
@@ -1311,7 +1315,7 @@ A CA <span class="bcp14">MAY</span> still satisfy the <strong>http-validation-ov
 Operators of security-critical domains <span class="bcp14">MAY</span> choose not to permit this method since, unlike other cryptographic domain validation methods specified in this document, its security relies on the non-existence of malicious certificates for a domain at time of the creation of the security Property Tag in the domain's policy.<a href="#section-5-2.2.1" class="pilcrow">¶</a></p>
 </li>
         <li id="section-5-2.3">
-          <p id="section-5-2.3.1"><strong>known-account-specifier:</strong> For a CA to issue a certificate using this method 1) there <span class="bcp14">MUST</span> exist a unique identifier for a CA subscriber account that is communicated with the CA out-of-band, over authenticated DNS lookups, or in another manner that is immune to man-in-the-middle adversaries 2) the CA may only issue a certificate to an applicant that has authenticated itself to the CA as having access to that specified subscriber account.
+          <p id="section-5-2.3.1"><strong>known-account-specifier:</strong> For a CA to issue a certificate using this method 1) there <span class="bcp14">MUST</span> exist a unique identifier for a CA subscriber account that is communicated with the CA out-of-band, over authenticated DNS lookups, or in another manner that is immune to man-in-the-middle adversaries, and 2) the CA may only issue a certificate to an applicant that has authenticated itself to the CA as having access to that specified subscriber account.
 A CA does not have permission to issue under this method unless both of these criteria are met.
 Once these criteria have been met, the CA <span class="bcp14">MUST</span> additionally perform a validation method that is compliant with the Baseline Requirements for the Issuance and Management of Publicly-Trusted TLS Server Certificates.
 One acceptable way of including this account identifier is with the CAA ACME account URI extension, defined in <span>[<a href="#RFC8657" class="cite xref">RFC8657</a>]</span>, in an authenticated DNS record.<a href="#section-5-2.3.1" class="pilcrow">¶</a></p>
@@ -1325,7 +1329,7 @@ The CA <span class="bcp14">MUST</span> retrieve the public key or a hash of the 
 After private key control is established, the CA <span class="bcp14">MUST</span> additionally perform a validation method that is compliant with the Baseline Requirements for the Issuance and Management of Publicly-Trusted TLS Server Certificates.<a href="#section-5-2.4.1" class="pilcrow">¶</a></p>
 </li>
       </ol>
-<p id="section-5-3">In the event that <strong>no methods property specified in the top-level property-list,</strong> all methods specified in this document are acceptable as well as cryptographic domain validation methods defined in future RFCs.
+<p id="section-5-3">In the event that <strong>no methods attribute is specified in the top-level attribute-list,</strong> all methods specified in this document are acceptable as well as cryptographic domain validation methods defined in future RFCs.
 Future RFCs <span class="bcp14">MAY</span> specify additional methods for cryptographic domain validation so long as they satisfy the properties of cryptographic domain validation (i.e., robustness against global man-in-the-middle adversaries).<a href="#section-5-3" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -1334,11 +1338,11 @@ Future RFCs <span class="bcp14">MAY</span> specify additional methods for crypto
       <h2 id="name-permissible-options">
 <a href="#section-6" class="section-number selfRef">6. </a><a href="#name-permissible-options" class="section-name selfRef">Permissible Options</a>
       </h2>
-<p id="section-6-1">The following options <span class="bcp14">MAY</span> used as parameters in the options or options-critical property in the top-level property-list.<a href="#section-6-1" class="pilcrow">¶</a></p>
+<p id="section-6-1">The following options <span class="bcp14">MAY</span> used as sub-attributes in the options or options-critical attributes in the top-level attribute-list.<a href="#section-6-1" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-6-2">
 <li id="section-6-2.1">
           <p id="section-6-2.1.1"><strong>authenticated-policy-retrieval:</strong> This option signifies to a CA that it <span class="bcp14">MUST</span> retrieve a domain's CAA security Property and any associated domain-owner identity (e.g., identifiers used for known-account-specifier and private-key-control) using authenticated DNS lookups or other authenticated channels.
-If a CA finds this option as a parameter to the options-critical property and the CAA security Property was not retrieved using authenticated DNS lookups, the CA <span class="bcp14">MUST NOT</span> issue a certificate for that domain.<a href="#section-6-2.1.1" class="pilcrow">¶</a></p>
+If a CA finds this option as a sub-attribute in the options-critical attribute and the CAA security Property was not retrieved using authenticated DNS lookups, the CA <span class="bcp14">MUST NOT</span> issue a certificate for that domain.<a href="#section-6-2.1.1" class="pilcrow">¶</a></p>
 </li>
       </ol>
 <p id="section-6-3">Additionally, a CA <span class="bcp14">MAY</span> choose to honor its own non-standardized options that do not need to be supported by other CAs or the IETF.
