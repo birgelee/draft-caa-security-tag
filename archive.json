@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-12-17T01:14:41.519264+00:00",
+  "timestamp": "2024-12-19T01:12:41.442646+00:00",
   "repo": "birgelee/draft-caa-security-tag",
   "labels": [
     {
@@ -84,24 +84,26 @@
       "id": "PR_kwDONHkCO86E8X3I",
       "title": "rename property -> attribute and allow for nested attribute lists",
       "url": "https://github.com/birgelee/draft-caa-security-tag/pull/2",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "cyrill-k",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2024-12-12T02:09:31Z",
-      "updatedAt": "2024-12-12T02:09:31Z",
+      "updatedAt": "2024-12-18T19:28:09Z",
       "baseRepository": "birgelee/draft-caa-security-tag",
       "baseRefName": "main",
       "baseRefOid": "b267b5165e97eeb089b7c0beccb9c9125cc1b416",
       "headRepository": "cyrill-k/draft-caa-security-tag",
       "headRefName": "fix-syntax",
       "headRefOid": "d490a2aabd8e7eac3f4fed6865caa74620d97921",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2024-12-18T19:28:09Z",
+      "mergedAt": "2024-12-18T19:28:09Z",
+      "mergedBy": "birgelee",
+      "mergeCommit": {
+        "oid": "10c141f2766e47538f03f57b4ab34ec8b19e056f"
+      },
       "comments": [],
       "reviews": []
     },
