@@ -5,13 +5,13 @@
 Limited Additional Mechanisms for PKIX and SMIME            H. Birge-Lee
 Internet-Draft                                            G. Cimaszewski
 Intended status: Experimental                           C. E. Krähenbühl
-Expires: 21 June 2025                                            L. Wang
+Expires: 19 July 2025                                            L. Wang
                                                     Princeton University
                                                                 A. Gable
                                                                     ISRG
                                                                P. Mittal
                                                     Princeton University
-                                                        18 December 2024
+                                                         15 January 2025
 
 
           CAA Security Tag for Cryptographic Domain Validation
@@ -65,11 +65,11 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 21 June 2025.
+   This Internet-Draft will expire on 19 July 2025.
 
 Copyright Notice
 
-   Copyright (c) 2024 IETF Trust and the persons identified as the
+   Copyright (c) 2025 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -85,16 +85,22 @@ Table of Contents
 
    1.  Introduction
    2.  Conventions and Definitions
+     2.1.  Cryptographic Domain Validation
+       2.1.1.  Threat Model
+       2.1.2.  Secure Policy Lookup
+       2.1.3.  Downgrade Prevention
    3.  CAA security Property
-   4.  Well-known Attributes
-   5.  Permissible Methods
-   6.  Permissible Options
-   7.  Applicability
-   8.  Single CAA security Property for Each Domain
-   9.  CAA security Property Protection
-   10. Security Considerations
-   11. IANA Considerations
-   12. Normative References
+     3.1.  Syntax
+     3.2.  Well-known Attributes
+       3.2.1.  Permissible Methods
+       3.2.2.  Permissible Options
+     3.3.  Co-existence with other CAA Properties
+       3.3.1.  CAA security Property
+       3.3.2.  CAA issue and issuewild Property
+       3.3.3.  CAA iodef Property
+   4.  Security Considerations
+   5.  IANA Considerations
+   6.  Normative References
    Acknowledgments
    Authors' Addresses
 
@@ -130,12 +136,101 @@ Table of Contents
    BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
    capitals, as shown here.
 
+2.1.  Cryptographic Domain Validation
+
+   The goal of cryptographic domain validation is to ensure that domain
+   validation is based on communication channels that are authenticated
+   through cryptographic operations.
+
+2.1.1.  Threat Model
+
+   Cryptographic domain validation defends against a network adversary
+   that can block, intercept, modify, and forge arbitrary network
+   packets sent between a CA and the domain's network resources, but
+   cannot forge cryptographic objects, such as signatures and encrypted
+   data.  Cryptographic domain validation is based on DNS and thus
+   assumes that a domain owner can securely mange their DNS records,
+   i.e., communication between the domain owner and their DNS
+   infrastructure is protected against network adversaries.  Similarly,
+   communication between the entity generating the private key and
+   requesting the certificate, e.g., the domain owner, and the
+   webserver(s) where the private key and certificate are installed, is
+   assumed to be protected against network adversaries.  Furthermore, it
+   assumes that all CAs are benign and correctly follow all necessary
+   validation procedures as described in the relevant standardization
+   documents.
+
+   Cryptographic domain validation can be used on domains that are
+   contained in both domain validation certificates (where only the
+   domain name in a certificate is validated) and extended or
+   organization validated certificates (where information like
+   organization identity as well as domain name is validated).
+   Cryptographic domain validation only hardens the security of the
+   validation of domain names, not broader identities (e.g.,
+   organization names).  The use of cryptographic domain validation in
+   an OV or EV certificate only improves the validation of the domain
+   name(s) contained in the certificate (in the common name or subject-
+   alternate names fields) and does not impact the validation of other
+   forms of identity contained in the certificate.  Use of cryptographic
+   domain validation in a DV certificate does not imply validation of
+   any identity beyond the domain name(s) in the certificate.
+
+   The defense involves the domain owner specifying a policy indicating
+   their desire for cryptographic domain validation via DNS CAA records
+   and securely communicating these records to all CAs.  Hence, a core
+   aspect of cryptographic domain validation is 1) ensuring secure
+   policy lookups, and 2) preventing downgrade attacks that convince a
+   CA to issue a certificate using non-cryptographic domain validation.
+
+2.1.2.  Secure Policy Lookup
+
+   A security CAA record SHOULD be protected with a valid DNSSEC
+   signature chain going back to the ICANN DNSSEC root or hosted on
+   authoritative DNS servers, to which CAs have authenticated
+   communication channels.  Any security CAA record not protected by
+   such a signature or authenticated channel MAY not benefit from the
+   security properties outlined in this document.  If it is not possible
+   to have a DNSSEC signature chain back to the ICANN root, security CAA
+   records SHOULD alternately be hosted in an authoritative DNS resolver
+   that supports recursive-to-authoritative DoT or DoH.
+
+   TODO: add reference to [RFC9539] and elaborate on appendix B.
+
+2.1.3.  Downgrade Prevention
+
+   To ensure that the CAA security Property is immediately and
+   incrementally deployable without requiring all publicly-trusted CAs
+   to understand the property, the CAA record containing the property
+   MUST set the critical flag.
+
+   Serving security CAA records over authenticated DNS channels or using
+   authenticated DNS records (i.e., DNSSEC) is critical to the
+   effectiveness of the records because a security CAA record not
+   protected by authenticated DNS may be suppressed by an adversary that
+   can manipulate DNS responses.  This could potentially allow the
+   adversary to downgrade validation to use a low-security method and
+   undermine the security properties of the security Property Tag.
+
+   If DNSSEC is used to authenticate the CAA record, a CA MUST only
+   accept the non-existence of a security CAA record if its non-
+   existence is proven by NSEC record as described in [RFC7129].
+
+   If authenticated channels are used to authenticate the CAA record,
+   CAs MUST also require recursive-to-authoritative DoT or DoH
+   communication (and not permit standard unencrypted DNS connections)
+   for DNS providers that host security CAA records.  This prevents
+   downgrade attacks where an adversary attempts to interfere with the
+   establishment of a DoT or DoH encrypted channel and cause a fallback
+   to unencrypted DNS over UDP or TCP.
+
 3.  CAA security Property
 
    The CAA security Property Tag MUST be "security" and the flags field
    of a CAA record containing the security Property MUST have the
    critical bit set.  In this document, we refer to a CAA record with
    these characteristics as a *security CAA record*.
+
+3.1.  Syntax
 
    The CAA security Property Value has the following sub-syntax
    (specified in ABNF as per [RFC5234]).
@@ -166,7 +261,7 @@ Table of Contents
    attributes are specified, the sub-attribute list MUST NOT be empty,
    i.e., "attribute()" is not a valid CAA security Property Value.
 
-4.  Well-known Attributes
+3.2.  Well-known Attributes
 
    The top-level attribute-list MAY contain the following attributes.
 
@@ -194,10 +289,10 @@ Table of Contents
    additional attributes.  Subsequent RFCs MAY standardize additional
    attributes.
 
-5.  Permissible Methods
+3.2.1.  Permissible Methods
 
    The following attributes MAY be specified as sub-attributes of the
-   methods attributes.  Each method specifies particular aspects of
+   methods attribute.  Each method specifies particular aspects of
    certificate issuance that MUST be satisfied for a certificate to be
    issued using that method.  While some methods entail the use of CA/
    Browser Forum-compliant domain control validation methods, others do
@@ -290,7 +385,7 @@ Table of Contents
    properties of cryptographic domain validation (i.e., robustness
    against global man-in-the-middle adversaries).
 
-6.  Permissible Options
+3.2.2.  Permissible Options
 
    The following options MAY used as sub-attributes in the options or
    options-critical attributes in the top-level attribute-list.
@@ -310,57 +405,42 @@ Table of Contents
    These options MUST be prefixed with "-<ca_name>-" where ca_name is
    the name of the CA that initially developed the option.
 
-7.  Applicability
+3.3.  Co-existence with other CAA Properties
 
-   CAA security Property Tags can be used on domains that are contained
-   in both domain validation certificates (where only the domain name in
-   a certificate is validated) and extended or organization validated
-   certificates (where information like organization identity as well as
-   domain name is validated).  Cryptographic Domain Validation only
-   hardens the security of the validation of domain names, not broader
-   identities (e.g., organization names).  The use of cryptographic
-   domain validation in an OV or EV certificate only improves the
-   validation of the domain name(s) contained in the certificate (in the
-   common name or subject-alternate names fields) and does not impact
-   the validation of other forms of identity contained in the
-   certificate.  Use of cryptographic domain validation in a DV
-   certificate does not imply validation of any identity beyond the
-   domain name(s) in the certificate.
+   The behavior of a CA when encountering a CAA RRset that contains
+   multiple CAA Properties, including a security Property, depends on
+   the CAA Property Tags.
 
-8.  Single CAA security Property for Each Domain
+3.3.1.  CAA security Property
 
-   A single domain MUST NOT have multiple security Property Tags
-   specified.  A domain's entire cryptographic domain validation policy
-   MUST be encoded into a single CAA security Property.  If a CA finds a
-   domain that has multiple security Property Tags at the same FQDN, the
-   CA MUST block issuance.
+   To minimize complexity and avoid the risk of unexpected behavior, a
+   domain's entire cryptographic domain validation policy SHOULD be
+   encoded into a single CAA security Property.  If a CAA RRset contains
+   multiple security Properties, a CA MUST block issuance if the
+   certificate request does not comply with any of the security Tags.
+   This ensures that if a new security Property Tag is specified, its
+   security properties cannot be subverted by a stale security Property
+   Tag.
 
-9.  CAA security Property Protection
+3.3.2.  CAA issue and issuewild Property
 
-   A security CAA record SHOULD be protected with a valid DNSSEC
-   signature chain going back to the ICANN DNSSEC root or hosted on
-   authoritative DNS servers that CAs have authenticated communication
-   channels with.  Any security CAA record not protected by such a
-   signature MAY not benefit from the security properties outlined in
-   this document.  If it is not possible to have a DNSSEC signature
-   chain back to the ICANN root, security CAA records SHOULD alternately
-   be hosted in an authoritative DNS resolver that supports recursive-
-   to-authoritative DoT or DoH.  CAs SHOULD also require recursive-to-
-   authoritative DoT or DoH communication (and not permit standard
-   unencrypted DNS connections) for DNS providers that host security CAA
-   records.  This prevents downgrade attacks where an adversary attempts
-   to interfere with the establishment of a DoT or DoH encrypted channel
-   and cause a fallback to unencrypted DNS over UDP or TCP.
+   If a domain specifies both security Properties and a set of issue and
+   issuewild Properties, the CA MUST adhere to all security Properties,
+   as described above, and the CA MUST adhere to the set of issue and
+   issuewild Properties as described in [RFC8659].
 
-   Serving security CAA records over authenticated DNS channels or using
-   authenticated DNS records (i.e., DNSSEC) is critical to the
-   effectiveness of the records because a security CAA record not
-   protected by authenticated DNS may be suppressed by an adversary that
-   can manipulate DNS responses.  This could potentially allow the
-   adversary to downgrade validation to use a low-security method and
-   undermine the security properties of the security Property Tag.
+3.3.3.  CAA iodef Property
 
-10.  Security Considerations
+   The usage of the iodef Property is analogous to [RFC8659], i.e., it
+   provides a CA the means of reporting certificate issue requests or
+   certificate issue requests or cases of certificate issue for domains
+   for which the Property appears in the Relevant RRset, when those
+   requests or issuances violate the security policy of the Issuer or
+   the FQDN holder.  The iodef Property can be used to inform a domain
+   owner about a blocked issuance due to an overly restrictive security
+   Property.
+
+4.  Security Considerations
 
    Many of the security considerations regarding security CAA records
    are inherited from those of CAA records more generally.  Because
@@ -372,12 +452,12 @@ Table of Contents
    secure validation methods.  Particularly, domains without a security
    CAA record are often highly vulnerable to man-in-the-middle
    adversaries that can intercept communications from a CA to the
-   victim's domain.  This record significantly reduces this attack
-   surface.
+   victim's domain.  The security Property significantly reduces this
+   attack surface.
 
    As with any restriction on certificate issuance, this introduces the
-   potential for a Denial of Service attack (or DoS attack).  There are
-   two potential approaches to launching a DoS attack via security CAA
+   potential for a Denial of Service (DoS) attack.  There are two
+   potential approaches to launching a DoS attack via security CAA
    records.  The first is to attack a domain and spoof the existence of
    a security CAA record in order to prevent the domain owner from
    renewing his or her certificate (presuming the domain under attack
@@ -406,11 +486,11 @@ Table of Contents
    CAA record lookups that block issuance and should instead recheck the
    CAA record set when a new issuance request is received.
 
-11.  IANA Considerations
+5.  IANA Considerations
 
    This document has no IANA actions.
 
-12.  Normative References
+6.  Normative References
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
@@ -421,6 +501,10 @@ Table of Contents
               Specifications: ABNF", STD 68, RFC 5234,
               DOI 10.17487/RFC5234, January 2008,
               <https://www.rfc-editor.org/rfc/rfc5234>.
+
+   [RFC7129]  Gieben, R. and W. Mekking, "Authenticated Denial of
+              Existence in the DNS", RFC 7129, DOI 10.17487/RFC7129,
+              February 2014, <https://www.rfc-editor.org/rfc/rfc7129>.
 
    [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
@@ -441,6 +525,12 @@ Table of Contents
               "DNS Certification Authority Authorization (CAA) Resource
               Record", RFC 8659, DOI 10.17487/RFC8659, November 2019,
               <https://www.rfc-editor.org/rfc/rfc8659>.
+
+   [RFC9539]  Gillmor, D. K., Ed., Salazar, J., Ed., and P. Hoffman,
+              Ed., "Unilateral Opportunistic Deployment of Encrypted
+              Recursive-to-Authoritative DNS", RFC 9539,
+              DOI 10.17487/RFC9539, February 2024,
+              <https://www.rfc-editor.org/rfc/rfc9539>.
 
 Acknowledgments
 
