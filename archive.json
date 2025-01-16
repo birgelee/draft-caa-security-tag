@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-01-14T01:05:34.248825+00:00",
+  "timestamp": "2025-01-16T01:06:31.552131+00:00",
   "repo": "birgelee/draft-caa-security-tag",
   "labels": [
     {
@@ -112,24 +112,26 @@
       "id": "PR_kwDONHkCO86E8aQk",
       "title": "Restructuring",
       "url": "https://github.com/birgelee/draft-caa-security-tag/pull/3",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "cyrill-k",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "- Reorganized structure and added more nested (sub-)headings\r\n- Added discussion on interaction between security Properties and other Properties\r\n- Now allows for multiple security Properties but requires a CA to be compliant with all of them\r\n- Added todo on specifying authenticated tunnels, possibly using RFC 9539 https://datatracker.ietf.org/doc/rfc9539/\r\n\r\nSuggest to first merge #2 to reduce the number of changes in this PR",
       "createdAt": "2024-12-12T02:16:11Z",
-      "updatedAt": "2024-12-12T02:16:12Z",
+      "updatedAt": "2025-01-15T19:12:35Z",
       "baseRepository": "birgelee/draft-caa-security-tag",
       "baseRefName": "main",
       "baseRefOid": "b267b5165e97eeb089b7c0beccb9c9125cc1b416",
       "headRepository": "cyrill-k/draft-caa-security-tag",
       "headRefName": "restructuring",
       "headRefOid": "9a91c30cfd4126de4a5fb2f4fa13ba8480f0a11f",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2025-01-15T19:12:35Z",
+      "mergedAt": "2025-01-15T19:12:35Z",
+      "mergedBy": "birgelee",
+      "mergeCommit": {
+        "oid": "777e16bb2a26333357ad0aa45a10cb0d5d2d1fe4"
+      },
       "comments": [],
       "reviews": []
     }
