@@ -167,6 +167,14 @@ An attribute-list MUST NOT have two attributes with the same name specified even
 
 The attribute-list MAY contain the following attributes.
 
+The attribute values of the attributes specified in this document have the following sub-syntax (specified in ABNF as per {{RFC5234}}).
+
+well-known-attribute-value = \*WSP comma-sep-list \*WSP
+
+comma-sep-list = (list-item \*WSP "," \*WSP comma-sep-list) / list-item
+
+list-item = \*(%x21-2B / %x2D-3A / %x3C-7E)
+
 1. **methods:** If specified, this attribute MUST have a non-empty comma-separated list of cryptographic domain validation methods that can be used to validate that particular domain.
 A CA MUST use one of the methods specified in the methods attribute value to perform cryptographic domain validation.
 If there is no method specified that the CA is capable of complying with, the CA MUST deny issuance.
