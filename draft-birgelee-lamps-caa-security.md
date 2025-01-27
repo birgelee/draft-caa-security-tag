@@ -67,7 +67,7 @@ informative:
 
 --- abstract
 
-Cryptographic domain validation procedures leverage authenticated communication channels to ensure resilience against attacks by both on-path and off-path network attackers which may be located between the CA and the network resources related to the domain contained in the certificate.
+Cryptographic domain validation procedures leverage authenticated communication channels to ensure resilience against attacks by both on-path and off-path network adversaries which may be located between the CA and the network resources related to the domain contained in the certificate.
 Domain owners can leverage "security" Property Tags specified in CAA records (defined in {{RFC8659}}) with the critical flag set, to ensure that CAs perform cryptographic domain validation during their issuance procedure, hence defending against global man-in-the-middle adversaries.
 This document defines the syntax of the CAA security Property as well as acceptable means for cryptographic domain validation procedures.
 
@@ -109,11 +109,21 @@ Hence, a core aspect of cryptographic domain validation is 1\) ensuring secure p
 
 ### Secure Policy Lookup
 
-A security CAA record SHOULD be protected with a valid DNSSEC signature chain going back to the ICANN DNSSEC root or hosted on authoritative DNS servers, to which CAs have authenticated communication channels.
+The authenticity of the retrieved security CAA record SHOULD be protected to prevent an active network adversary from modifying its content.
+Authenticity can either be ensured by signing the security CAA record or by retrieving the security CAA record via an authenticated channel.
 Any security CAA record not protected by such a signature or authenticated channel MAY not benefit from the security properties outlined in this document.
-If it is not possible to have a DNSSEC signature chain back to the ICANN root, security CAA records SHOULD alternately be hosted on an authoritative DNS resolver that supports recursive-to-authoritative DoT or DoH.
 
-TODO: add reference to {{RFC9539}} and elaborate on appendix B.
+#### Signed Record
+A security CAA record SHOULD be protected with a valid DNSSEC signature chain going back to the ICANN DNSSEC root, to prove the authenticity of the record and its content.
+
+#### Authenticated Channel
+If it is not possible to have a DNSSEC signature chain back to the ICANN root, security CAA records SHOULD alternately be hosted on an authoritative DNS resolver that supports recursive-to-authoritative authenticated channels.
+Authenticated channels between recursive and authoritative nameservers could be deployed as described in {{RFC9539}} and leverage DoT, DoQ, or DoH as protocols providing an authenticated channel.
+Since secure policy lookup considers a more stringent threat model than the passive network adversary in {{RFC9539}}, the deployment MUST also implement defenses against active adversaries highlighted in {{Appendix B of RFC9539}}.
+One option to implement these defenses is by creating DNSSEC-protected SVCB DNS records at the authoritative nameserver.
+These SVCB records provide a signaling mechanism for authoritative nameservers offering authenticated tunnels.
+Simultaneously, the SVCB records MUST specify parameters to validate the authenticity of the TLS certificate used to establish the authenticated tunnel, e.g., the public key hash.
+This step is crucial to achieve our desired security properties, since it eliminates the circular dependency of requiring an authentic TLS certificate to secure the issuance of new TLS certificate.
 
 ### Downgrade Prevention
 
