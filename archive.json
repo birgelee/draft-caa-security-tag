@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-01-26T01:09:16.245273+00:00",
+  "timestamp": "2025-01-28T01:06:56.985938+00:00",
   "repo": "birgelee/draft-caa-security-tag",
   "labels": [
     {
@@ -134,6 +134,99 @@
       },
       "comments": [],
       "reviews": []
+    },
+    {
+      "number": 4,
+      "id": "PR_kwDONHkCO86JHbwJ",
+      "title": "Fix syntax and add SVCB Discussion",
+      "url": "https://github.com/birgelee/draft-caa-security-tag/pull/4",
+      "state": "OPEN",
+      "author": "cyrill-k",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "- Replace recursive syntax with syntax similar to RFC9539\r\n- Change CA-specific option prefix from \"-<ca_name>-\" to \"ca-<ca_name>-\" to conform to new syntax\r\n- Add proposal on how to defeat active adversaries using SVCB DNS records (address the issues raised in Appendix B of RFC9539",
+      "createdAt": "2025-01-27T17:20:05Z",
+      "updatedAt": "2025-01-27T20:51:49Z",
+      "baseRepository": "birgelee/draft-caa-security-tag",
+      "baseRefName": "main",
+      "baseRefOid": "777e16bb2a26333357ad0aa45a10cb0d5d2d1fe4",
+      "headRepository": "cyrill-k/draft-caa-security-tag",
+      "headRefName": "fix-syntax",
+      "headRefOid": "824887235e29d100a836dd4b169ac49f7238ed53",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDONHkCO86ZjDkP",
+          "commit": {
+            "abbreviatedOid": "1d3e778"
+          },
+          "author": "birgelee",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-01-27T17:30:15Z",
+          "updatedAt": "2025-01-27T17:33:08Z",
+          "comments": [
+            {
+              "originalPosition": 29,
+              "body": "In other parts of the draft we have gone with SHOULD recommendations for this type of stuff. I am somewhat in favor of a SHOULD here. Even though having a key hash in the SVCB record is really important, my understanding is that we are no where saying we MUST use an SVCB record. Thus, this becomes a MUST within a SHOULD (i.e., if there exists and SVCB record, then it MUST have a key hash). I worry this will create non-intuitive failure behavior and require implementing parties to put in an additional check that is not part of standard SVCB record processing.\r\n\r\nIn short, I would prefer:\r\nthe SVCB records SHOULD specify parameters to validate the authenticity of the TLS...",
+              "createdAt": "2025-01-27T17:30:15Z",
+              "updatedAt": "2025-01-27T17:33:08Z"
+            },
+            {
+              "originalPosition": 70,
+              "body": "Doesn't this need a syntax descriptor as well for what the attribute value should look like specifically? Even the phrase non-empty comma separated list could be ambiguous regarding things like leading/trailing white space etc...",
+              "createdAt": "2025-01-27T17:32:20Z",
+              "updatedAt": "2025-01-27T17:33:08Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDONHkCO86ZklRw",
+          "commit": {
+            "abbreviatedOid": "1d3e778"
+          },
+          "author": "cyrill-k",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-01-27T20:37:30Z",
+          "updatedAt": "2025-01-27T20:37:30Z",
+          "comments": [
+            {
+              "originalPosition": 29,
+              "body": "I see your point that this may confusion.\r\nI'm okay with changing it to SHOULD.\r\n\r\nMy thought process was:\r\n\r\n1. secure policy lookup requires DNSSEC [SHOULD] OR authenticated tunnel [SHOULD if no DNSSEC]\r\n   - \"Authenticity can either be ensured by signing the security CAA record or by retrieving the security CAA record via an authenticated channel.\"\r\n2. example of authenticated tunnel: DoX tunnel (RFC9593) + defense against active attacker [MUST]\r\n   - \"... MUST also implement defenses against active adversaries\"\r\n3. example of defense against active attacker: downgrade protection using DNSSEC-protected SVCB record + key authenticity using public key hash in SVCB [MUST]\r\n   - \"... MUST specify parameters to validate the authenticity of the TLS certificate ...\"\r\n\r\nThe reason I used MUST is that I wanted to have a consistent terminology with the active adversary defense text, and that we need public key hashes in SVCB to fully defend against an active adversary, which may launch BGP hijacks against CAs to get fake TLS certs for the nameserver.\r\nAlternatively, we could also require nameserver domains to protect themselves against network adversaries using DNSSEC-signed security CAA tags.",
+              "createdAt": "2025-01-27T20:37:30Z",
+              "updatedAt": "2025-01-27T20:37:30Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDONHkCO86ZklcP",
+          "commit": {
+            "abbreviatedOid": "1d3e778"
+          },
+          "author": "cyrill-k",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-01-27T20:37:51Z",
+          "updatedAt": "2025-01-27T20:37:52Z",
+          "comments": [
+            {
+              "originalPosition": 70,
+              "body": "Sure, I can add syntax descriptors in this section as well :+1: ",
+              "createdAt": "2025-01-27T20:37:52Z",
+              "updatedAt": "2025-01-27T20:37:52Z"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
