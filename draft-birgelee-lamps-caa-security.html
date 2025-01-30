@@ -1376,25 +1376,26 @@ An attribute-list <span class="bcp14">MUST NOT</span> have two attributes with t
 <p id="section-3.2-2">The attribute values of the attributes specified in this document have the following sub-syntax (specified in ABNF as per <span>[<a href="#RFC5234" class="cite xref">RFC5234</a>]</span>).<a href="#section-3.2-2" class="pilcrow">¶</a></p>
 <p id="section-3.2-3">well-known-attribute-value = *WSP comma-sep-list *WSP<a href="#section-3.2-3" class="pilcrow">¶</a></p>
 <p id="section-3.2-4">comma-sep-list = (list-item *WSP "," *WSP comma-sep-list) / list-item<a href="#section-3.2-4" class="pilcrow">¶</a></p>
-<p id="section-3.2-5">list-item = *(%x21-2B / %x2D-3A / %x3C-7E)<a href="#section-3.2-5" class="pilcrow">¶</a></p>
-<ol start="1" type="1" class="normal type-1" id="section-3.2-6">
-<li id="section-3.2-6.1">
-            <p id="section-3.2-6.1.1"><strong>methods:</strong> If specified, this attribute <span class="bcp14">MUST</span> have a non-empty comma-separated list of cryptographic domain validation methods that can be used to validate that particular domain.
+<p id="section-3.2-5">list-item = item-characters *item-characters<a href="#section-3.2-5" class="pilcrow">¶</a></p>
+<p id="section-3.2-6">item-characters = %x21-2B / %x2D-3A / %x3C-7E<a href="#section-3.2-6" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-3.2-7">
+<li id="section-3.2-7.1">
+            <p id="section-3.2-7.1.1"><strong>methods:</strong> If specified, this attribute <span class="bcp14">MUST</span> have a non-empty comma-separated list of cryptographic domain validation methods that can be used to validate that particular domain.
 A CA <span class="bcp14">MUST</span> use one of the methods specified in the methods attribute value to perform cryptographic domain validation.
-If there is no method specified that the CA is capable of complying with, the CA <span class="bcp14">MUST</span> deny issuance.<a href="#section-3.2-6.1.1" class="pilcrow">¶</a></p>
+If there is no method specified that the CA is capable of complying with, the CA <span class="bcp14">MUST</span> deny issuance.<a href="#section-3.2-7.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li id="section-3.2-6.2">
-            <p id="section-3.2-6.2.1"><strong>options:</strong> If specified, this attribute <span class="bcp14">MUST</span> have a non-empty comma-separated list of options.
+          <li id="section-3.2-7.2">
+            <p id="section-3.2-7.2.1"><strong>options:</strong> If specified, this attribute <span class="bcp14">MUST</span> have a non-empty comma-separated list of options.
 A CA <span class="bcp14">SHOULD</span> try to honor any option specified in this list.
-If a CA does not understand an option or does not have that option implemented the, CA <span class="bcp14">MAY</span> proceed with issuance.<a href="#section-3.2-6.2.1" class="pilcrow">¶</a></p>
+If a CA does not understand an option or does not have that option implemented the, CA <span class="bcp14">MAY</span> proceed with issuance.<a href="#section-3.2-7.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li id="section-3.2-6.3">
-            <p id="section-3.2-6.3.1"><strong>options-critical:</strong> If specified, this attribute <span class="bcp14">MUST</span> have a non-empty comma-separated list of options.
-To proceed with issuance, a CA <span class="bcp14">MUST</span> understand and implement all options specified in the options-critical attribute value.<a href="#section-3.2-6.3.1" class="pilcrow">¶</a></p>
+          <li id="section-3.2-7.3">
+            <p id="section-3.2-7.3.1"><strong>options-critical:</strong> If specified, this attribute <span class="bcp14">MUST</span> have a non-empty comma-separated list of options.
+To proceed with issuance, a CA <span class="bcp14">MUST</span> understand and implement all options specified in the options-critical attribute value.<a href="#section-3.2-7.3.1" class="pilcrow">¶</a></p>
 </li>
         </ol>
-<p id="section-3.2-7">The attribute-list <span class="bcp14">MAY</span> contain additional attributes and a CA <span class="bcp14">MAY</span> proceed with issuance even if it does not understand these additional attributes.
-Subsequent RFCs <span class="bcp14">MAY</span> standardize additional attributes.<a href="#section-3.2-7" class="pilcrow">¶</a></p>
+<p id="section-3.2-8">The attribute-list <span class="bcp14">MAY</span> contain additional attributes and a CA <span class="bcp14">MAY</span> proceed with issuance even if it does not understand these additional attributes.
+Subsequent RFCs <span class="bcp14">MAY</span> standardize additional attributes.<a href="#section-3.2-8" class="pilcrow">¶</a></p>
 <div id="permissible-methods">
 <section id="section-3.2.1">
           <h4 id="name-permissible-methods">
