@@ -121,8 +121,8 @@ If it is not possible to have a DNSSEC signature chain back to the ICANN root, s
 Authenticated channels between recursive and authoritative nameservers could be deployed as described in {{RFC9539}} and leverage DoT, DoQ, or DoH as protocols providing an authenticated channel.
 Since secure policy lookup considers a more stringent threat model than the passive network adversary in {{RFC9539}}, the deployment MUST also implement defenses against active adversaries highlighted in {{Appendix B of RFC9539}}.
 One option to implement these defenses is by creating DNSSEC-protected SVCB DNS records at the authoritative nameserver.
-These SVCB records provide a signaling mechanism for authoritative nameservers offering authenticated tunnels.
-Simultaneously, the SVCB records MUST specify parameters to validate the authenticity of the TLS certificate used to establish the authenticated tunnel, e.g., the public key hash.
+These SVCB records provide a signaling mechanism for authoritative nameservers offering authenticated channel.
+Furthermore, the authenticity of the TLS certificate public key used to establish the channel MUST be protected, e.g., by specifying the public key hash as an SVCB parameter.
 This step is crucial to achieve our desired security properties, since it eliminates the circular dependency of requiring an authentic TLS certificate to secure the issuance of new TLS certificate.
 
 ### Downgrade Prevention
