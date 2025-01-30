@@ -5,13 +5,13 @@
 Limited Additional Mechanisms for PKIX and SMIME            H. Birge-Lee
 Internet-Draft                                            G. Cimaszewski
 Intended status: Experimental                           C. E. Krähenbühl
-Expires: 19 July 2025                                            L. Wang
+Expires: 3 August 2025                                           L. Wang
                                                     Princeton University
                                                                 A. Gable
                                                                     ISRG
                                                                P. Mittal
                                                     Princeton University
-                                                         15 January 2025
+                                                         30 January 2025
 
 
           CAA Security Tag for Cryptographic Domain Validation
@@ -21,7 +21,7 @@ Abstract
 
    Cryptographic domain validation procedures leverage authenticated
    communication channels to ensure resilience against attacks by both
-   on-path and off-path network attackers which may be located between
+   on-path and off-path network adversaries which may be located between
    the CA and the network resources related to the domain contained in
    the certificate.  Domain owners can leverage "security" Property Tags
    specified in CAA records (defined in [RFC8659]) with the critical
@@ -65,7 +65,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 19 July 2025.
+   This Internet-Draft will expire on 3 August 2025.
 
 Copyright Notice
 
@@ -184,17 +184,41 @@ Table of Contents
 
 2.1.2.  Secure Policy Lookup
 
-   A security CAA record SHOULD be protected with a valid DNSSEC
-   signature chain going back to the ICANN DNSSEC root or hosted on
-   authoritative DNS servers, to which CAs have authenticated
-   communication channels.  Any security CAA record not protected by
-   such a signature or authenticated channel MAY not benefit from the
-   security properties outlined in this document.  If it is not possible
-   to have a DNSSEC signature chain back to the ICANN root, security CAA
-   records SHOULD alternately be hosted in an authoritative DNS resolver
-   that supports recursive-to-authoritative DoT or DoH.
+   The authenticity of the retrieved security CAA record SHOULD be
+   protected to prevent an active network adversary from modifying its
+   content.  Authenticity can either be ensured by signing the security
+   CAA record or by retrieving the security CAA record via an
+   authenticated channel.  Any security CAA record not protected by such
+   a signature or authenticated channel MAY not benefit from the
+   security properties outlined in this document.
 
-   TODO: add reference to [RFC9539] and elaborate on appendix B.
+2.1.2.1.  Signed Record
+
+   A security CAA record SHOULD be protected with a valid DNSSEC
+   signature chain going back to the ICANN DNSSEC root, to prove the
+   authenticity of the record and its content.
+
+2.1.2.2.  Authenticated Channel
+
+   If it is not possible to have a DNSSEC signature chain back to the
+   ICANN root, security CAA records SHOULD alternately be hosted on an
+   authoritative DNS resolver that supports recursive-to-authoritative
+   authenticated channels.  Authenticated channels between recursive and
+   authoritative nameservers could be deployed as described in [RFC9539]
+   and leverage DoT, DoQ, or DoH as protocols providing an authenticated
+   channel.  Since secure policy lookup considers a more stringent
+   threat model than the passive network adversary in [RFC9539], the
+   deployment MUST also implement defenses against active adversaries
+   highlighted in Appendix B of [RFC9539].  One option to implement
+   these defenses is by creating DNSSEC-protected SVCB DNS records at
+   the authoritative nameserver.  These SVCB records provide a signaling
+   mechanism for authoritative nameservers offering authenticated
+   channel.  Furthermore, the authenticity of the TLS certificate public
+   key used to establish the channel MUST be protected, e.g., by
+   specifying the public key hash as an SVCB parameter.  This step is
+   crucial to achieve our desired security properties, since it
+   eliminates the circular dependency of requiring an authentic TLS
+   certificate to secure the issuance of new TLS certificate.
 
 2.1.3.  Downgrade Prevention
 
@@ -237,68 +261,72 @@ Table of Contents
 
    security-value = *WSP [attribute-list] *WSP
 
-   attribute-list = (attribute *WSP "," *WSP attribute-list) / attribute
+   attribute-list = (attribute *WSP ";" *WSP attribute-list) / attribute
 
-   attribute = attribute-name *WSP ["(" *WSP attribute-list *WSP ")"]
+   attribute = attribute-name *WSP "=" *WSP attribute-value
 
-   attribute-name = character-set *character-set
+   attribute-name = (ALPHA / DIGIT) *( *("-") (ALPHA / DIGIT))
 
-   character-set = ALPHA / DIGIT / ":" / "_" / "-"
+   attribute-value = *(%x21-3A / %x3C-7E)
 
    Hence, the security Property Value can either be empty or entirely
-   whitespace, or contain a list of comma-separated attributes.  Each
-   attribute has an optional list of comma-separated (sub-)attributes
-   associated with the attribute in parentheses after the attribute.
-   These attributes can in turn be associated with sub-attributes,
-   allowing the specification of nested attribute lists.  Attributes
-   MUST consist only of lowercase letters (a-z), uppercase letters
-   (A-Z), numbers (0-9), colon (:), underscore (_), and hyphen (-), and
-   are case sensitive.
+   whitespace, or contain a list of semicolon-separated attribute name-
+   value pairs.
+
+   Similar to [RFC8659], attribute names are specified in letter-digit-
+   hyphen Label (LDH-Label) form while attribute values can contain any
+   printable character except semicolon.
 
    All attributes specified in an attribute-list MUST be unique.  An
    attribute-list MUST NOT have two attributes with the same name
-   specified even if they contain different sub-attributes.  If sub-
-   attributes are specified, the sub-attribute list MUST NOT be empty,
-   i.e., "attribute()" is not a valid CAA security Property Value.
+   specified even if they contain different attribute values.
 
 3.2.  Well-known Attributes
 
-   The top-level attribute-list MAY contain the following attributes.
+   The attribute-list MAY contain the following attributes.
 
-   1.  *methods:* If specified, this attribute MUST have sub-attributes
-       listing various cryptographic domain validation methods that can
-       be used to validate that particular domain.  A CA MUST use one of
-       the methods specified in the methods sub-attributes to perform
-       cryptographic domain validation.  If there is no method specified
-       that the CA is capable of complying with, the CA MUST deny
-       issuance.
+   The attribute values of the attributes specified in this document
+   have the following sub-syntax (specified in ABNF as per [RFC5234]).
 
-   2.  *options:* If specified, this attribute MUST have sub-attributes
-       listing various options.  A CA SHOULD try to honor any option
-       specified in this list.  If a CA does not understand an option or
-       does not have that option implemented the, CA MAY proceed with
-       issuance.
+   well-known-attribute-value = *WSP comma-sep-list *WSP
 
-   3.  *options-critical:* If specified, this attribute MUST have sub-
-       attributes listing various options.  To proceed with issuance, a
-       CA MUST understand and implement all options specified in the
-       options-critical sub-attributes
+   comma-sep-list = (list-item *WSP "," *WSP comma-sep-list) / list-item
 
-   The top-level attribute-list MAY contain additional attributes and a
-   CA MAY proceed with issuance even if it does not understand these
-   additional attributes.  Subsequent RFCs MAY standardize additional
-   attributes.
+   list-item = *(%x21-2B / %x2D-3A / %x3C-7E)
+
+   1.  *methods:* If specified, this attribute MUST have a non-empty
+       comma-separated list of cryptographic domain validation methods
+       that can be used to validate that particular domain.  A CA MUST
+       use one of the methods specified in the methods attribute value
+       to perform cryptographic domain validation.  If there is no
+       method specified that the CA is capable of complying with, the CA
+       MUST deny issuance.
+
+   2.  *options:* If specified, this attribute MUST have a non-empty
+       comma-separated list of options.  A CA SHOULD try to honor any
+       option specified in this list.  If a CA does not understand an
+       option or does not have that option implemented the, CA MAY
+       proceed with issuance.
+
+   3.  *options-critical:* If specified, this attribute MUST have a non-
+       empty comma-separated list of options.  To proceed with issuance,
+       a CA MUST understand and implement all options specified in the
+       options-critical attribute value.
+
+   The attribute-list MAY contain additional attributes and a CA MAY
+   proceed with issuance even if it does not understand these additional
+   attributes.  Subsequent RFCs MAY standardize additional attributes.
 
 3.2.1.  Permissible Methods
 
-   The following attributes MAY be specified as sub-attributes of the
-   methods attribute.  Each method specifies particular aspects of
-   certificate issuance that MUST be satisfied for a certificate to be
-   issued using that method.  While some methods entail the use of CA/
-   Browser Forum-compliant domain control validation methods, others do
-   not entail CA/Browser Forum-compliant domain control validation and
-   must be used in conjunction with a CA/Browser Forum-compliant domain
-   control validation method to permit certificate issuance.
+   The following attributes MAY be specified in the methods attribute
+   value.  Each method specifies particular aspects of certificate
+   issuance that MUST be satisfied for a certificate to be issued using
+   that method.  While some methods entail the use of CA/Browser Forum-
+   compliant domain control validation methods, others do not entail CA/
+   Browser Forum-compliant domain control validation and must be used in
+   conjunction with a CA/Browser Forum-compliant domain control
+   validation method to permit certificate issuance.
 
    1.  *secure-dns-record-change:* This method involves an applicant
        showing control of a DNSSEC-protected DNS record or a record that
@@ -377,7 +405,7 @@ Table of Contents
        the Baseline Requirements for the Issuance and Management of
        Publicly-Trusted TLS Server Certificates.
 
-   In the event that *no methods attribute is specified in the top-level
+   In the event that *no methods attribute is specified in the
    attribute-list,* all methods specified in this document are
    acceptable as well as cryptographic domain validation methods defined
    in future RFCs.  Future RFCs MAY specify additional methods for
@@ -387,22 +415,21 @@ Table of Contents
 
 3.2.2.  Permissible Options
 
-   The following options MAY used as sub-attributes in the options or
-   options-critical attributes in the top-level attribute-list.
+   The following options MAY be used in the options or options-critical
+   attribute values.
 
    1.  *authenticated-policy-retrieval:* This option signifies to a CA
        that it MUST retrieve a domain's CAA security Property and any
        associated domain-owner identity (e.g., identifiers used for
        known-account-specifier and private-key-control) using
        authenticated DNS lookups or other authenticated channels.  If a
-       CA finds this option as a sub-attribute in the options-critical
-       attribute and the CAA security Property was not retrieved using
-       authenticated DNS lookups, the CA MUST NOT issue a certificate
-       for that domain.
+       CA finds this option in the options-critical attribute and the
+       CAA security Property was not retrieved using authenticated DNS
+       lookups, the CA MUST NOT issue a certificate for that domain.
 
    Additionally, a CA MAY choose to honor its own non-standardized
    options that do not need to be supported by other CAs or the IETF.
-   These options MUST be prefixed with "-<ca_name>-" where ca_name is
+   These options MUST be prefixed with "ca-<ca_name>-" where ca_name is
    the name of the CA that initially developed the option.
 
 3.3.  Co-existence with other CAA Properties
@@ -433,12 +460,11 @@ Table of Contents
 
    The usage of the iodef Property is analogous to [RFC8659], i.e., it
    provides a CA the means of reporting certificate issue requests or
-   certificate issue requests or cases of certificate issue for domains
-   for which the Property appears in the Relevant RRset, when those
-   requests or issuances violate the security policy of the Issuer or
-   the FQDN holder.  The iodef Property can be used to inform a domain
-   owner about a blocked issuance due to an overly restrictive security
-   Property.
+   cases of certificate issue for domains for which the Property appears
+   in the Relevant RRset, when those requests or issuances violate the
+   security policy of the Issuer or the FQDN holder.  The iodef Property
+   can be used to inform a domain owner about a blocked issuance due to
+   an overly restrictive security Property.
 
 4.  Security Considerations
 
