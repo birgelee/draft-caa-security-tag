@@ -173,7 +173,9 @@ well-known-attribute-value = \*WSP comma-sep-list \*WSP
 
 comma-sep-list = (list-item \*WSP "," \*WSP comma-sep-list) / list-item
 
-list-item = \*(%x21-2B / %x2D-3A / %x3C-7E)
+list-item = item-characters \*item-characters
+
+item-characters = %x21-2B / %x2D-3A / %x3C-7E
 
 1. **methods:** If specified, this attribute MUST have a non-empty comma-separated list of cryptographic domain validation methods that can be used to validate that particular domain.
 A CA MUST use one of the methods specified in the methods attribute value to perform cryptographic domain validation.
