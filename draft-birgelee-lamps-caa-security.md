@@ -146,19 +146,21 @@ In this document, we refer to a CAA record with these characteristics as a **sec
 
 The CAA security Property Value has the following sub-syntax (specified in ABNF as per {{RFC5234}}).
 
-security-value = \*WSP \[attribute-list\] \*WSP
+~~~
+security-value = *WSP [attribute-list] *WSP
 
-attribute-list = (attribute \*WSP ";" \*WSP attribute-list) / attribute
-
-attribute = attribute-name \*WSP "=" \*WSP attribute-value
+attribute-list = (attribute *WSP ";" *WSP attribute-list) / attribute
+attribute = attribute-name *WSP "=" *WSP attribute-value
 
 attribute-name = (ALPHA / DIGIT) *( *("-") (ALPHA / DIGIT))
-
-attribute-value = \*(%x21-3A / %x3C-7E)
+attribute-value = *(value-char / WSP) value-char *(value-char / WSP)
+value-char = %x21-3A / %x3C-7E
+~~~
 
 Hence, the security Property Value can either be empty or entirely whitespace, or contain a list of semicolon-separated attribute name-value pairs.
 
-Similar to {{RFC8659}}, attribute names are specified in letter-digit-hyphen Label (LDH-Label) form while attribute values can contain any printable character except semicolon.
+Similar to {{RFC8659}}, attribute names are specified in letter-digit-hyphen Label (LDH-Label) form while attribute values can contain whitespace and any printable character except semicolon.
+Note that attribute values MUST contain at least one printable (non-whitespace) character.
 
 All attributes specified in an attribute-list MUST be unique.
 An attribute-list MUST NOT have two attributes with the same name specified even if they contain different attribute values.
@@ -169,13 +171,13 @@ The attribute-list MAY contain the following attributes.
 
 The attribute values of the attributes specified in this document have the following sub-syntax (specified in ABNF as per {{RFC5234}}).
 
-well-known-attribute-value = \*WSP comma-sep-list \*WSP
+~~~
+well-known-attribute-value = *WSP comma-sep-list *WSP
 
-comma-sep-list = (list-item \*WSP "," \*WSP comma-sep-list) / list-item
-
-list-item = item-characters \*item-characters
-
-item-characters = %x21-2B / %x2D-3A / %x3C-7E
+comma-sep-list = (list-item *WSP "," *WSP comma-sep-list) / list-item
+list-item = 1*item-char
+item-char = %x21-2B / %x2D-3A / %x3C-7E
+~~~
 
 1. **methods:** If specified, this attribute MUST have a non-empty comma-separated list of cryptographic domain validation methods that can be used to validate that particular domain.
 A CA MUST use one of the methods specified in the methods attribute value to perform cryptographic domain validation.
