@@ -5,13 +5,13 @@
 Limited Additional Mechanisms for PKIX and SMIME            H. Birge-Lee
 Internet-Draft                                            G. Cimaszewski
 Intended status: Experimental                           C. E. Krähenbühl
-Expires: 3 August 2025                                           L. Wang
+Expires: 4 August 2025                                           L. Wang
                                                     Princeton University
                                                                 A. Gable
                                                                     ISRG
                                                                P. Mittal
                                                     Princeton University
-                                                         30 January 2025
+                                                         31 January 2025
 
 
           CAA Security Tag for Cryptographic Domain Validation
@@ -65,7 +65,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 3 August 2025.
+   This Internet-Draft will expire on 4 August 2025.
 
 Copyright Notice
 
@@ -262,20 +262,21 @@ Table of Contents
    security-value = *WSP [attribute-list] *WSP
 
    attribute-list = (attribute *WSP ";" *WSP attribute-list) / attribute
-
    attribute = attribute-name *WSP "=" *WSP attribute-value
 
    attribute-name = (ALPHA / DIGIT) *( *("-") (ALPHA / DIGIT))
-
-   attribute-value = *(%x21-3A / %x3C-7E)
+   attribute-value = *(value-char / WSP) value-char *(value-char / WSP)
+   value-char = %x21-3A / %x3C-7E
 
    Hence, the security Property Value can either be empty or entirely
    whitespace, or contain a list of semicolon-separated attribute name-
    value pairs.
 
    Similar to [RFC8659], attribute names are specified in letter-digit-
-   hyphen Label (LDH-Label) form while attribute values can contain any
-   printable character except semicolon.
+   hyphen Label (LDH-Label) form while attribute values can contain
+   whitespace and any printable character except semicolon.  Note that
+   attribute values MUST contain at least one printable (non-whitespace)
+   character.
 
    All attributes specified in an attribute-list MUST be unique.  An
    attribute-list MUST NOT have two attributes with the same name
@@ -291,10 +292,8 @@ Table of Contents
    well-known-attribute-value = *WSP comma-sep-list *WSP
 
    comma-sep-list = (list-item *WSP "," *WSP comma-sep-list) / list-item
-
-   list-item = item-characters *item-characters
-
-   item-characters = %x21-2B / %x2D-3A / %x3C-7E
+   list-item = 1*item-char
+   item-char = %x21-2B / %x2D-3A / %x3C-7E
 
    1.  *methods:* If specified, this attribute MUST have a non-empty
        comma-separated list of cryptographic domain validation methods
