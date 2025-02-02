@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-01-30T01:05:45.669401+00:00",
+  "timestamp": "2025-02-02T01:10:32.114914+00:00",
   "repo": "birgelee/draft-caa-security-tag",
   "labels": [
     {
@@ -140,24 +140,26 @@
       "id": "PR_kwDONHkCO86JHbwJ",
       "title": "Fix syntax and add SVCB Discussion",
       "url": "https://github.com/birgelee/draft-caa-security-tag/pull/4",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "cyrill-k",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "- Replace recursive syntax with syntax similar to RFC9539\r\n- Change CA-specific option prefix from \"-<ca_name>-\" to \"ca-<ca_name>-\" to conform to new syntax\r\n- Add proposal on how to defeat active adversaries using SVCB DNS records (address the issues raised in Appendix B of RFC9539",
       "createdAt": "2025-01-27T17:20:05Z",
-      "updatedAt": "2025-01-27T20:51:49Z",
+      "updatedAt": "2025-01-30T15:37:28Z",
       "baseRepository": "birgelee/draft-caa-security-tag",
       "baseRefName": "main",
       "baseRefOid": "777e16bb2a26333357ad0aa45a10cb0d5d2d1fe4",
       "headRepository": "cyrill-k/draft-caa-security-tag",
       "headRefName": "fix-syntax",
-      "headRefOid": "824887235e29d100a836dd4b169ac49f7238ed53",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "bf09a782e5f587fe309d21a5db23acad82c8e649",
+      "closedAt": "2025-01-30T15:37:28Z",
+      "mergedAt": "2025-01-30T15:37:28Z",
+      "mergedBy": "birgelee",
+      "mergeCommit": {
+        "oid": "3291689ddbfd94e9ec035214946f9f77286250a7"
+      },
       "comments": [],
       "reviews": [
         {
@@ -225,6 +227,130 @@
               "updatedAt": "2025-01-27T20:37:52Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDONHkCO86aCCxh",
+          "commit": {
+            "abbreviatedOid": "1d3e778"
+          },
+          "author": "cyrill-k",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-01-30T15:23:49Z",
+          "updatedAt": "2025-01-30T15:23:49Z",
+          "comments": [
+            {
+              "originalPosition": 29,
+              "body": "I changed the sentence to be more general and not mandate the SVCB public key hash property.",
+              "createdAt": "2025-01-30T15:23:49Z",
+              "updatedAt": "2025-01-30T15:23:49Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDONHkCO86aCC28",
+          "commit": {
+            "abbreviatedOid": "1d3e778"
+          },
+          "author": "cyrill-k",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-01-30T15:23:56Z",
+          "updatedAt": "2025-01-30T15:23:56Z",
+          "comments": [
+            {
+              "originalPosition": 70,
+              "body": "Done.",
+              "createdAt": "2025-01-30T15:23:56Z",
+              "updatedAt": "2025-01-30T15:23:56Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 5,
+      "id": "PR_kwDONHkCO86JhVwp",
+      "title": "fix syntax to not allow empty lists",
+      "url": "https://github.com/birgelee/draft-caa-security-tag/pull/5",
+      "state": "MERGED",
+      "author": "cyrill-k",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-01-30T16:02:29Z",
+      "updatedAt": "2025-01-30T16:05:09Z",
+      "baseRepository": "birgelee/draft-caa-security-tag",
+      "baseRefName": "main",
+      "baseRefOid": "3291689ddbfd94e9ec035214946f9f77286250a7",
+      "headRepository": "cyrill-k/draft-caa-security-tag",
+      "headRefName": "fix-syntax",
+      "headRefOid": "e0223e950d7375aa9192517533a4d74474c3a2ff",
+      "closedAt": "2025-01-30T16:05:09Z",
+      "mergedAt": "2025-01-30T16:05:09Z",
+      "mergedBy": "birgelee",
+      "mergeCommit": {
+        "oid": "07d445f204e37dedb7460e5237249709b78cff52"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDONHkCO86aCgJM",
+          "commit": {
+            "abbreviatedOid": "e0223e9"
+          },
+          "author": "birgelee",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-01-30T16:05:01Z",
+          "updatedAt": "2025-01-30T16:05:01Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 6,
+      "id": "PR_kwDONHkCO86JrHPU",
+      "title": "Adjust syntax and improve formatting",
+      "url": "https://github.com/birgelee/draft-caa-security-tag/pull/6",
+      "state": "MERGED",
+      "author": "cyrill-k",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "- Use proper markdown code blocks for ABNF syntax\r\n- Shorten syntax\r\n- Allow whitespace inside attribute values\r\n- Disallow whitespace-only attribute values",
+      "createdAt": "2025-01-31T18:12:43Z",
+      "updatedAt": "2025-01-31T22:38:16Z",
+      "baseRepository": "birgelee/draft-caa-security-tag",
+      "baseRefName": "main",
+      "baseRefOid": "07d445f204e37dedb7460e5237249709b78cff52",
+      "headRepository": "cyrill-k/draft-caa-security-tag",
+      "headRefName": "fix-syntax",
+      "headRefOid": "96e24439a2376c75f21342d989c286b12439283c",
+      "closedAt": "2025-01-31T22:38:16Z",
+      "mergedAt": "2025-01-31T22:38:16Z",
+      "mergedBy": "birgelee",
+      "mergeCommit": {
+        "oid": "07004d27d3de70290df35cd2f1998c3d526d1380"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDONHkCO86aQcY0",
+          "commit": {
+            "abbreviatedOid": "96e2443"
+          },
+          "author": "birgelee",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-01-31T22:38:11Z",
+          "updatedAt": "2025-01-31T22:38:11Z",
+          "comments": []
         }
       ]
     }
