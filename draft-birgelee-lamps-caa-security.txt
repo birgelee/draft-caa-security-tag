@@ -5,13 +5,13 @@
 Limited Additional Mechanisms for PKIX and SMIME            H. Birge-Lee
 Internet-Draft                                            G. Cimaszewski
 Intended status: Experimental                           C. E. Krähenbühl
-Expires: 4 August 2025                                           L. Wang
+Expires: 15 August 2025                                          L. Wang
                                                     Princeton University
                                                                 A. Gable
                                                                     ISRG
                                                                P. Mittal
                                                     Princeton University
-                                                         31 January 2025
+                                                        11 February 2025
 
 
           CAA Security Tag for Cryptographic Domain Validation
@@ -65,7 +65,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 4 August 2025.
+   This Internet-Draft will expire on 15 August 2025.
 
 Copyright Notice
 
@@ -189,7 +189,7 @@ Table of Contents
    content.  Authenticity can either be ensured by signing the security
    CAA record or by retrieving the security CAA record via an
    authenticated channel.  Any security CAA record not protected by such
-   a signature or authenticated channel MAY not benefit from the
+   a signature or authenticated channel may not benefit from the
    security properties outlined in this document.
 
 2.1.2.1.  Signed Record
@@ -445,7 +445,7 @@ Table of Contents
    domain's entire cryptographic domain validation policy SHOULD be
    encoded into a single CAA security Property.  If a CAA RRset contains
    multiple security Properties, a CA MUST block issuance if the
-   certificate request does not comply with any of the security Tags.
+   certificate request does not comply with all of the security Tags.
    This ensures that if a new security Property Tag is specified, its
    security properties cannot be subverted by a stale security Property
    Tag.
