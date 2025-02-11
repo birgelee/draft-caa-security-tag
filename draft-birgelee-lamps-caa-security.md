@@ -111,7 +111,7 @@ Hence, a core aspect of cryptographic domain validation is 1\) ensuring secure p
 
 The authenticity of the retrieved security CAA record SHOULD be protected to prevent an active network adversary from modifying its content.
 Authenticity can either be ensured by signing the security CAA record or by retrieving the security CAA record via an authenticated channel.
-Any security CAA record not protected by such a signature or authenticated channel MAY not benefit from the security properties outlined in this document.
+Any security CAA record not protected by such a signature or authenticated channel may not benefit from the security properties outlined in this document.
 
 #### Signed Record
 A security CAA record SHOULD be protected with a valid DNSSEC signature chain going back to the ICANN DNSSEC root, to prove the authenticity of the record and its content.
@@ -241,7 +241,7 @@ The behavior of a CA when encountering a CAA RRset that contains multiple CAA Pr
 ### CAA security Property
 
 To minimize complexity and avoid the risk of unexpected behavior, a domain's entire cryptographic domain validation policy SHOULD be encoded into a single CAA security Property.
-If a CAA RRset contains multiple security Properties, a CA MUST block issuance if the certificate request does not comply with any of the security Tags.
+If a CAA RRset contains multiple security Properties, a CA MUST block issuance if the certificate request does not comply with all of the security Tags.
 This ensures that if a new security Property Tag is specified, its security properties cannot be subverted by a stale security Property Tag.
 
 ### CAA issue and issuewild Property
