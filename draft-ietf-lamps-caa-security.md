@@ -3,7 +3,7 @@ title: "CAA Security Tag for Cryptographically-Constrained Domain Validation"
 abbrev: "CAA Security Tag"
 category: std
 
-docname: draft-birgelee-lamps-caa-security-latest
+docname: draft-ietf-lamps-caa-security-latest
 submissiontype: IETF  # also: "independent", "editorial", "IAB", or "IRTF"
 number:
 date:
@@ -20,7 +20,7 @@ venue:
   mail: "spasm@ietf.org"
   arch: "https://mailarchive.ietf.org/arch/browse/spasm/"
   github: "birgelee/draft-caa-security-tag"
-  latest: "https://birgelee.github.io/draft-caa-security-tag/draft-birgelee-lamps-caa-security.html"
+  latest: "https://birgelee.github.io/draft-caa-security-tag/-ietf-lamps-caa-security.html"
 
 author:
  -
