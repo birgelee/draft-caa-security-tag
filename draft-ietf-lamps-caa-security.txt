@@ -4,42 +4,42 @@
 
 Limited Additional Mechanisms for PKIX and SMIME            H. Birge-Lee
 Internet-Draft                                            G. Cimaszewski
-Intended status: Experimental                           C. E. Krähenbühl
-Expires: 14 September 2025                                       L. Wang
+Intended status: Standards Track                        C. E. Krähenbühl
+Expires: 3 November 2025                                         L. Wang
                                                     Princeton University
                                                                 A. Gable
                                                                     ISRG
                                                                P. Mittal
                                                     Princeton University
-                                                           13 March 2025
+                                                              2 May 2025
 
 
-          CAA Security Tag for Cryptographic Domain Validation
-                draft-birgelee-lamps-caa-security-latest
+  CAA Security Tag for Cryptographically-Constrained Domain Validation
+                  draft-ietf-lamps-caa-security-latest
 
 Abstract
 
    Cryptographic domain validation procedures leverage authenticated
    communication channels to ensure resilience against attacks by both
    on-path and off-path network adversaries which may be located between
-   the CA and the network resources related to the domain contained in
-   the certificate.  Domain owners can leverage "security" Property Tags
-   specified in CAA records (defined in [RFC8659]) with the critical
-   flag set, to ensure that CAs perform cryptographic domain validation
-   during their issuance procedure, hence defending against global man-
-   in-the-middle adversaries.  This document defines the syntax of the
-   CAA security Property as well as acceptable means for cryptographic
-   domain validation procedures.
+   the Certification Authority (CA) and the network resources related to
+   the domain contained in the certificate.  Domain owners can leverage
+   "security" Property Tags specified in CAA records (defined in
+   [RFC8659]) with the critical flag set, to ensure that CAs perform
+   cryptographically-constrained domain validation during their issuance
+   procedure, hence defending against global man-in-the-middle
+   adversaries.  This document defines the syntax of the CAA security
+   Property as well as acceptable means for cryptographically-
+   constrained domain validation procedures.
 
 About This Document
 
    This note is to be removed before publishing as an RFC.
 
    The latest revision of this draft can be found at
-   https://birgelee.github.io/draft-caa-security-tag/draft-birgelee-
-   lamps-caa-security.html.  Status information for this document may be
-   found at https://datatracker.ietf.org/doc/draft-birgelee-lamps-caa-
-   security/.
+   https://birgelee.github.io/draft-caa-security-tag/-ietf-lamps-caa-
+   security.html.  Status information for this document may be found at
+   https://datatracker.ietf.org/doc/draft-ietf-lamps-caa-security/.
 
    Discussion of this document takes place on the Limited Additional
    Mechanisms for PKIX and SMIME Working Group mailing list
@@ -65,7 +65,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 14 September 2025.
+   This Internet-Draft will expire on 3 November 2025.
 
 Copyright Notice
 
@@ -114,11 +114,11 @@ Table of Contents
    is capable of intercepting and/or modifying communication between the
    CA and the network resources related to the domain being validated.
    Issuance of a certificate to a domain with a security Property Tag
-   MUST follow one of the specified Cryptographic Domain Validation
-   (CDV) methods outlined in this document or future extensions.  CDV
-   methods MUST rely on cryptographic protocols (like DNSSEC or DoH/DoT)
-   that offer security properties even in the presence of man-in-the-
-   middle adversaries that can intercept any communication occurring
+   MUST follow one of the specified Cryptographically-constrained Domain
+   Validation (CDV) methods outlined in this document or future
+   extensions.  CDV methods MUST rely on protocols (like DNSSEC or DoH/
+   DoT) that offer security properties even in the presence of man-in-
+   the-middle adversaries that can intercept any communication occurring
    over the public Internet.
 
    Not all CDV methods are themselves compliant with the CA/Browser
@@ -138,9 +138,9 @@ Table of Contents
 
 2.1.  Cryptographic Domain Validation
 
-   The goal of cryptographic domain validation is to ensure that domain
-   validation is based on communication channels that are authenticated
-   through cryptographic operations.
+   The goal of cryptographically-constrained domain validation is to
+   ensure that domain validation is based on communication channels that
+   are authenticated through cryptographic operations.
 
 2.1.1.  Threat Model
 
@@ -167,20 +167,22 @@ Table of Contents
    organization identity as well as domain name is validated).
    Cryptographic domain validation only hardens the security of the
    validation of domain names, not broader identities (e.g.,
-   organization names).  The use of cryptographic domain validation in
-   an OV or EV certificate only improves the validation of the domain
-   name(s) contained in the certificate (in the common name or subject-
-   alternate names fields) and does not impact the validation of other
-   forms of identity contained in the certificate.  Use of cryptographic
-   domain validation in a DV certificate does not imply validation of
-   any identity beyond the domain name(s) in the certificate.
+   organization names).  The use of cryptographically-constrained domain
+   validation in an OV or EV certificate only improves the validation of
+   the domain name(s) contained in the certificate (in the common name
+   or subject-alternate names fields) and does not impact the validation
+   of other forms of identity contained in the certificate.  Use of
+   cryptographically-constrained domain validation in a DV certificate
+   does not imply validation of any identity beyond the domain name(s)
+   in the certificate.
 
    The defense involves the domain owner specifying a policy indicating
-   their desire for cryptographic domain validation via DNS CAA records
-   and securely communicating these records to all CAs.  Hence, a core
-   aspect of cryptographic domain validation is 1) ensuring secure
-   policy lookups, and 2) preventing downgrade attacks that convince a
-   CA to issue a certificate using non-cryptographic domain validation.
+   their desire for cryptographically-constrained domain validation via
+   DNS CAA records and securely communicating these records to all CAs.
+   Hence, a core aspect of cryptographically-constrained domain
+   validation is 1) ensuring secure policy lookups, and 2) preventing
+   downgrade attacks that convince a CA to issue a certificate using
+   non-cryptographically-constrained domain validation.
 
 2.1.2.  Secure Policy Lookup
 
@@ -296,12 +298,12 @@ Table of Contents
    item-char = %x21-2B / %x2D-3A / %x3C-7E
 
    1.  *methods:* If specified, this attribute MUST have a non-empty
-       comma-separated list of cryptographic domain validation methods
-       that can be used to validate that particular domain.  A CA MUST
-       use one of the methods specified in the methods attribute value
-       to perform cryptographic domain validation.  If there is no
-       method specified that the CA is capable of complying with, the CA
-       MUST deny issuance.
+       comma-separated list of cryptographically-constrained domain
+       validation methods that can be used to validate that particular
+       domain.  A CA MUST use one of the methods specified in the
+       methods attribute value to perform cryptographically-constrained
+       domain validation.  If there is no method specified that the CA
+       is capable of complying with, the CA MUST deny issuance.
 
    2.  *options:* If specified, this attribute MUST have a non-empty
        comma-separated list of options.  A CA SHOULD try to honor any
@@ -364,10 +366,10 @@ Table of Contents
        the connection is established with a valid, trusted certificate
        and the same challenge value is observed.  Operators of security-
        critical domains MAY choose not to permit this method since,
-       unlike other cryptographic domain validation methods specified in
-       this document, its security relies on the non-existence of
-       malicious certificates for a domain at time of the creation of
-       the security Property Tag in the domain's policy.
+       unlike other cryptographically-constrained domain validation
+       methods specified in this document, its security relies on the
+       non-existence of malicious certificates for a domain at time of
+       the creation of the security Property Tag in the domain's policy.
 
    3.  *known-account-specifier:* For a CA to issue a certificate using
        this method 1) there MUST exist a unique identifier for a CA
@@ -408,11 +410,12 @@ Table of Contents
 
    In the event that *no methods attribute is specified in the
    attribute-list,* all methods specified in this document are
-   acceptable as well as cryptographic domain validation methods defined
-   in future RFCs.  Future RFCs MAY specify additional methods for
-   cryptographic domain validation so long as they satisfy the
-   properties of cryptographic domain validation (i.e., robustness
-   against global man-in-the-middle adversaries).
+   acceptable as well as cryptographically-constrained domain validation
+   methods defined in future RFCs.  Future RFCs MAY specify additional
+   methods for cryptographically-constrained domain validation so long
+   as they satisfy the properties of cryptographically-constrained
+   domain validation (i.e., robustness against global man-in-the-middle
+   adversaries).
 
 3.2.2.  Permissible Options
 
@@ -442,13 +445,13 @@ Table of Contents
 3.3.1.  CAA security Property
 
    To minimize complexity and avoid the risk of unexpected behavior, a
-   domain's entire cryptographic domain validation policy SHOULD be
-   encoded into a single CAA security Property.  If a CAA RRset contains
-   multiple security Properties, a CA MUST block issuance if the
-   certificate request does not comply with all of the security Tags.
-   This ensures that if a new security Property Tag is specified, its
-   security properties cannot be subverted by a stale security Property
-   Tag.
+   domain's entire cryptographically-constrained domain validation
+   policy SHOULD be encoded into a single CAA security Property.  If a
+   CAA RRset contains multiple security Properties, a CA MUST block
+   issuance if the certificate request does not comply with all of the
+   security Tags.  This ensures that if a new security Property Tag is
+   specified, its security properties cannot be subverted by a stale
+   security Property Tag.
 
 3.3.2.  CAA issue and issuewild Property
 
@@ -506,12 +509,13 @@ Table of Contents
    owners for validating domain ownership using security CAA records.  A
    domain owner may use an alternate method to satisfy the security CAA
    record.  In the event that a domain owner truly cannot satisfy any
-   cryptographic domain validation method, the domain owner can still
-   mitigate this attack by removing the security CAA record, obtaining a
-   certificate, and then reinstating the security CAA record once the
-   attack is over.  As with all CAA records, CAs should not cache stale
-   CAA record lookups that block issuance and should instead recheck the
-   CAA record set when a new issuance request is received.
+   cryptographically-constrained domain validation method, the domain
+   owner can still mitigate this attack by removing the security CAA
+   record, obtaining a certificate, and then reinstating the security
+   CAA record once the attack is over.  As with all CAA records, CAs
+   should not cache stale CAA record lookups that block issuance and
+   should instead recheck the CAA record set when a new issuance request
+   is received.
 
 5.  IANA Considerations
 
