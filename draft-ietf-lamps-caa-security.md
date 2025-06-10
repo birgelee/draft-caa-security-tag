@@ -111,7 +111,7 @@ Hence, a core aspect of cryptographically-constrained domain validation is 1\) e
 
 The authenticity of the retrieved security CAA record SHOULD be protected to prevent an active network adversary from modifying its content.
 Authenticity can either be ensured by signing the security CAA record or by retrieving the security CAA record via an authenticated channel.
-Any security CAA record not protected by such a signature or authenticated channel may not benefit from the security properties outlined in this document.
+Any security CAA record not protected by such a signature or authenticated channel may not benefit from the security properties outlined in this document. The term "authenticated DNS lookup" refers a DNS lookup that is authenticated using either a signed record or an authenticated channel.
 
 #### Signed Record
 A security CAA record SHOULD be protected with a valid DNSSEC signature chain going back to the ICANN DNSSEC root, to prove the authenticity of the record and its content.
@@ -209,17 +209,21 @@ This method MAY be directly satisfied while a CA is performing the "Agreed-Upon 
 A CA MAY still satisfy the **http-validation-over-tls** method even if it does not initiate connections to port 443 for HTTP challenges so long as either 1\) the connection initiated to port 80 serves a redirect to the same domain name over HTTPS at port 443 and the connection to the domain at port 443 servers a valid, trusted certificate or 2\) in addition to contacting the domain over port 80 the CA also contacts the domain over port 443 using HTTPS and the connection is established with a valid, trusted certificate and the same challenge value is observed.
 Operators of security-critical domains MAY choose not to permit this method since, unlike other cryptographically-constrained domain validation methods specified in this document, its security relies on the non-existence of malicious certificates for a domain at time of the creation of the security Property Tag in the domain's policy.
 
-3. **known-account-specifier:** For a CA to issue a certificate using this method 1) there MUST exist a unique identifier for a CA subscriber account that is communicated with the CA out-of-band, over authenticated DNS lookups, or in another manner that is immune to man-in-the-middle adversaries, and 2) the CA may only issue a certificate to an applicant that has authenticated itself to the CA as having access to that specified subscriber account.
+3. **known-account-specifier:** For a CA to issue a certificate using this method 1) there MUST exist a unique identifier for a CA subscriber account that is communicated with the CA out-of-band, over authenticated DNS lookups, or in another manner that is robust against man-in-the-middle adversaries, and 2) the CA may only issue a certificate to an applicant that has authenticated itself to the CA as having access to that specified subscriber account.
 A CA does not have permission to issue under this method unless both of these criteria are met.
 Once these criteria have been met, the CA MUST additionally perform a validation method that is compliant with the Baseline Requirements for the Issuance and Management of Publicly-Trusted TLS Server Certificates.
-One acceptable way of including this account identifier is with the CAA ACME account URI extension, defined in {{RFC8657}}, in an authenticated DNS record.
+Acceptable methods of communicating this account identifier include (but are not limited to):
+1) the CAA ACME account URI extension, defined in {{RFC8657}}, if retrieved via an authenticated DNS lookup
+2) a DNS TXT record at an underscore-prefixed subdomain of the domain being validated, if retrieved via an authenticated DNS lookup.
+The syntax of presented in [draft-sheth-identifiers-dns-00](https://datatracker.ietf.org/doc/draft-sheth-identifiers-dns/) MAY be used for this DNS record (e.g., "\_accounturi-persist.example.com").
 
 4. **private-key-control:** This method involves an applicant showing control of a private key that corresponds to a public key placed in a DNS record associated with the domain being validated.
 The private key must be used to sign a message containing: a unique identifier for the CA, the domain name\(s\) in the certificate, a timestamp, and a hash of the public key in the certificate.
 This message may be hashed and then have the signature generated over the hash of this message.
 Obtaining such a signed message from a certificate applicant authorizes the CA specified in the message to sign a certificate for those domain names with the specified public key within 24h of the timestamp provided in the message.
-The CA MUST retrieve the public key or a hash of the public key corresponding to the private key used for signing the message via an authenticated DNS lookup using either authenticated channels to the relevant authoritative nameservers (e.g., DoH or DoT) or validation of a DNSSEC signature chain back to the ICANN root.
+The CA MUST retrieve the public key or a hash of the public key corresponding to the private key used for signing the message via an authenticated DNS lookup.
 After private key control is established, the CA MUST additionally perform a validation method that is compliant with the Baseline Requirements for the Issuance and Management of Publicly-Trusted TLS Server Certificates.
+The syntax of presented in [draft-sheth-identifiers-dns-00](https://datatracker.ietf.org/doc/draft-sheth-identifiers-dns/) MAY be used to communicate the hash of a domain owner's public key (e.g., a DNS TXT record placed at "\_pki-key-persist.example.com").
 
 In the event that **no methods attribute is specified in the attribute-list,** all methods specified in this document are acceptable as well as cryptographically-constrained domain validation methods defined in future RFCs.
 Future RFCs MAY specify additional methods for cryptographically-constrained domain validation so long as they satisfy the properties of cryptographically-constrained domain validation (i.e., robustness against global man-in-the-middle adversaries).
@@ -261,18 +265,13 @@ Security CAA records reduce the attack surface of fraudulent validations by limi
 Particularly, domains without a security CAA record are often highly vulnerable to man-in-the-middle adversaries that can intercept communications from a CA to the victim's domain.
 The security Property significantly reduces this attack surface.
 
-As with any restriction on certificate issuance, this introduces the potential for a Denial of Service (DoS) attack.
-There are two potential approaches to launching a DoS attack via security CAA records.
-The first is to attack a domain and spoof the existence of a security CAA record in order to prevent the domain owner from renewing his or her certificate (presuming the domain under attack was not using a validation method compliant with the security CAA record).
-This attack vector is not novel to security CAA records and is enabled solely by following the procedure specified in {{RFC8659}}.
-Per {{RFC8659}}, the presence of any not-understood CAA record with the critical flag prevents issuance.
-Thus, the adoption of security CAA records does not increase the attack surface for this form of DoS attack as a gibberish CAA record with the critical flag set could lead to the same type of attack.
-
-A second approach to a DoS attack enabled by security CAA records is to target a domain already using a security CAA record and interfere with all of the permitted validation methods with the idea that the presence of the security CAA will prevent the domain from falling back on alternative validation methods.
+A DoS attack enabled by security CAA records is to target a domain already using a security CAA record and interfere with all of the permitted validation methods with the idea that the presence of the security CAA will prevent the domain from falling back on alternative validation methods.
 This attack vector is mitigated by the diversity of different methods available to domain owners for validating domain ownership using security CAA records.
 A domain owner may use an alternate method to satisfy the security CAA record.
 In the event that a domain owner truly cannot satisfy any cryptographically-constrained domain validation method, the domain owner can still mitigate this attack by removing the security CAA record, obtaining a certificate, and then reinstating the security CAA record once the attack is over.
 As with all CAA records, CAs should not cache stale CAA record lookups that block issuance and should instead recheck the CAA record set when a new issuance request is received.
+
+The CAA Security tag also permits CAs to retrieve DNS records via authenticated channels between recursive and authoritative DNS servers to provide authentication on domains that are not DNSSEC-signed. Even when these channels are appropriately authenticated (e.g., using the methods discussed in {{authenticated-channel}}), retrieving DNS records over authenticated channels does not provide the same properties as DNSSEC. Specifically, DNSSEC offers message encryption whereas authenticated channels offer only transport encryption. Thus, while providing protection against network adversaries, DNS over authenticated channels does not provide protection against compromised authoritative DNS servers. DNS over authenticated channels also does not provide the same attestation properties as DNSSEC.
 
 # IANA Considerations
 
