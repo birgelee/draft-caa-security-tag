@@ -134,7 +134,7 @@ This could potentially allow the adversary to downgrade validation to use a low-
 
 If DNSSEC is used to authenticate the CAA record, a CA MUST only accept the non-existence of a security CAA record if its non-existence is proven by NSEC record as described in {{RFC7129}}.
 
-If authenticated channels are used to authenticate the CAA record, CAs MUST also require recursive-to-authoritative DoT or DoH communication (and not permit standard unencrypted DNS connections) for any DNS responses do not have a valid DNSSEC signature chain to a trusted root.
+If authenticated channels are used to authenticate the CAA record, CAs MUST also require recursive-to-authoritative DoT or DoH communication (and not permit standard unencrypted DNS connections) for any DNS responses that do not have a valid DNSSEC signature chain to a trusted root.
 This prevents downgrade attacks where an adversary attempts to interfere with the establishment of a DoT or DoH encrypted channel and cause a fallback to unencrypted DNS over UDP or TCP.
 
 # CAA security Property
@@ -270,7 +270,12 @@ A domain owner may use an alternate method to satisfy the security CAA record.
 In the event that a domain owner truly cannot satisfy any cryptographically-constrained domain validation method, the domain owner can still mitigate this attack by removing the security CAA record, obtaining a certificate, and then reinstating the security CAA record once the attack is over.
 As with all CAA records, CAs should not cache stale CAA record lookups that block issuance and should instead recheck the CAA record set when a new issuance request is received.
 
-The CAA Security tag also permits CAs to retrieve DNS records via authenticated channels between recursive and authoritative DNS servers to provide authentication on domains that are not DNSSEC-signed. Even when these channels are appropriately authenticated (e.g., using the methods discussed in {{authenticated-channel}}), retrieving DNS records over authenticated channels does not provide the same properties as DNSSEC. Specifically, DNSSEC provides authenticated DNS responses whereas DNS over authenticated channels only provides authenticated transport of DNS responses. Thus, while providing protection against network adversaries, DNS over authenticated channels does not provide protection against compromised authoritative DNS servers. DNS over authenticated channels also does not provide the same attestation properties as DNSSEC.
+The CAA Security tag also permits CAs to retrieve DNS records via authenticated channels between recursive and authoritative DNS servers to provide authentication on domains that are not DNSSEC-signed.
+Even when these channels are appropriately authenticated (e.g., using the methods discussed in {{authenticated-channel}}), retrieving DNS records over authenticated channels does not provide the same properties as DNSSEC.
+Specifically, DNSSEC provides authenticated DNS responses whereas DNS over authenticated channels only provides authenticated transport of DNS responses.
+Thus, while providing protection against network adversaries, DNS over authenticated channels does not provide protection against compromised authoritative DNS servers.
+For example, if DNSSEC private keys are stored separately from the authoritative server, even a compromised authoritative server cannot forge authentic DNSSEC records.
+DNS over authenticated channels also does not provide the same attestation properties as DNSSEC.
 
 # IANA Considerations
 
