@@ -276,6 +276,7 @@ Specifically, DNSSEC provides authenticated DNS responses whereas DNS over authe
 Thus, while providing protection against network adversaries, DNS over authenticated channels does not provide protection against compromised authoritative DNS servers.
 For example, if DNSSEC private keys are stored separately from the authoritative server, even a compromised authoritative server cannot forge authentic DNSSEC records.
 DNS over authenticated channels also does not provide the same attestation properties as DNSSEC.
+Finally, DNS over authenticated channels SHOULD NOT rely on web PKI authentication to avoid a circular dependency.
 
 # IANA Considerations
 
