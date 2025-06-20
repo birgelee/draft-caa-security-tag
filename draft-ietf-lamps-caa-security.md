@@ -67,7 +67,7 @@ informative:
 
 --- abstract
 
-Cryptographic domain validation procedures leverage authenticated communication channels to ensure resilience against attacks by both on-path and off-path network adversaries which attempt to tamper communications between the Certification Authority (CA) and the network resources related to the domain contained in the certificate.
+Cryptographic domain validation procedures leverage authenticated communication channels to ensure resilience against attacks by both on-path and off-path network adversaries which attempt to tamper with communications between the Certification Authority (CA) and the network resources related to the domain contained in the certificate.
 Domain owners can leverage "security" Property Tags specified in CAA records (defined in {{RFC8659}}) with the critical flag set, to ensure that CAs perform cryptographically-constrained domain validation during their issuance procedure, hence defending against global man-in-the-middle adversaries.
 This document defines the syntax of the CAA security Property as well as acceptable means for cryptographically-constrained domain validation procedures.
 
@@ -270,7 +270,7 @@ A domain owner may use an alternate method to satisfy the security CAA record.
 In the event that a domain owner truly cannot satisfy any cryptographically-constrained domain validation method, the domain owner can still mitigate this attack by removing the security CAA record, obtaining a certificate, and then reinstating the security CAA record once the attack is over.
 As with all CAA records, CAs should not cache stale CAA record lookups that block issuance and should instead recheck the CAA record set when a new issuance request is received.
 
-The CAA Security tag also permits CAs to retrieve DNS records via authenticated channels between recursive and authoritative DNS servers to provide authentication on domains that are not DNSSEC-signed. Even when these channels are appropriately authenticated (e.g., using the methods discussed in {{authenticated-channel}}), retrieving DNS records over authenticated channels does not provide the same properties as DNSSEC. Specifically, DNSSEC provides authenticated DNS responses whereas authenticated channels for DNS only offers authenticated transport of DNS responses. Thus, while providing protection against network adversaries, DNS over authenticated channels does not provide protection against compromised authoritative DNS servers. DNS over authenticated channels also does not provide the same attestation properties as DNSSEC.
+The CAA Security tag also permits CAs to retrieve DNS records via authenticated channels between recursive and authoritative DNS servers to provide authentication on domains that are not DNSSEC-signed. Even when these channels are appropriately authenticated (e.g., using the methods discussed in {{authenticated-channel}}), retrieving DNS records over authenticated channels does not provide the same properties as DNSSEC. Specifically, DNSSEC provides authenticated DNS responses whereas DNS over authenticated channels only provides authenticated transport of DNS responses. Thus, while providing protection against network adversaries, DNS over authenticated channels does not provide protection against compromised authoritative DNS servers. DNS over authenticated channels also does not provide the same attestation properties as DNSSEC.
 
 # IANA Considerations
 
