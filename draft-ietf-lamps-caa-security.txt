@@ -527,7 +527,9 @@ Table of Contents
    stored separately from the authoritative server, even a compromised
    authoritative server cannot forge authentic DNSSEC records.  DNS over
    authenticated channels also does not provide the same attestation
-   properties as DNSSEC.
+   properties as DNSSEC.  Finally, DNS over authenticated channels
+   SHOULD NOT rely on web PKI authentication to avoid a circular
+   dependency.
 
 5.  IANA Considerations
 
