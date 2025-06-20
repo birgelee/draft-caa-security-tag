@@ -21,7 +21,7 @@ Abstract
 
    Cryptographic domain validation procedures leverage authenticated
    communication channels to ensure resilience against attacks by both
-   on-path and off-path network adversaries which attempt to tamper
+   on-path and off-path network adversaries which attempt to tamper with
    communications between the Certification Authority (CA) and the
    network resources related to the domain contained in the certificate.
    Domain owners can leverage "security" Property Tags specified in CAA
@@ -519,7 +519,7 @@ Table of Contents
    (e.g., using the methods discussed in Section 2.1.2.2), retrieving
    DNS records over authenticated channels does not provide the same
    properties as DNSSEC.  Specifically, DNSSEC provides authenticated
-   DNS responses whereas authenticated channels for DNS only offers
+   DNS responses whereas DNS over authenticated channels only provides
    authenticated transport of DNS responses.  Thus, while providing
    protection against network adversaries, DNS over authenticated
    channels does not provide protection against compromised
