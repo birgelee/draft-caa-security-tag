@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-06-19T01:21:24.345921+00:00",
+  "timestamp": "2025-06-22T01:28:14.658691+00:00",
   "repo": "birgelee/draft-caa-security-tag",
   "labels": [
     {
@@ -350,6 +350,48 @@
           "body": "",
           "createdAt": "2025-01-31T22:38:11Z",
           "updatedAt": "2025-01-31T22:38:11Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 7,
+      "id": "PR_kwDONHkCO86bcBmu",
+      "title": "Address Prateek's comments",
+      "url": "https://github.com/birgelee/draft-caa-security-tag/pull/7",
+      "state": "MERGED",
+      "author": "cyrill-k",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-06-20T15:20:35Z",
+      "updatedAt": "2025-06-20T20:47:26Z",
+      "baseRepository": "birgelee/draft-caa-security-tag",
+      "baseRefName": "main",
+      "baseRefOid": "b77498f80a576461ed0f0a4ed6f2c10b1a08fe6f",
+      "headRepository": "cyrill-k/draft-caa-security-tag",
+      "headRefName": "comments-prateek",
+      "headRefOid": "d4e0ed8bb17bd1607ba1d14c5d897623d012c153",
+      "closedAt": "2025-06-20T20:47:26Z",
+      "mergedAt": "2025-06-20T20:47:26Z",
+      "mergedBy": "birgelee",
+      "mergeCommit": {
+        "oid": "52cb84b772a0b276cd98ddd94dd63e9054727c07"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDONHkCO86vq3Vj",
+          "commit": {
+            "abbreviatedOid": "d4e0ed8"
+          },
+          "author": "birgelee",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-06-20T20:47:21Z",
+          "updatedAt": "2025-06-20T20:47:21Z",
           "comments": []
         }
       ]
