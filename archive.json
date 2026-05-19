@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-05-17T02:49:01.161397+00:00",
+  "timestamp": "2026-05-19T02:55:24.795117+00:00",
   "repo": "birgelee/draft-caa-security-tag",
   "labels": [
     {
@@ -49,7 +49,24 @@
       "color": "ffffff"
     }
   ],
-  "issues": [],
+  "issues": [
+    {
+      "number": 8,
+      "id": "I_kwDONHkCO88AAAABCjL_5A",
+      "title": "Problem with this type of policy is that it can't be configured CA-wise",
+      "url": "https://github.com/birgelee/draft-caa-security-tag/issues/8",
+      "state": "OPEN",
+      "author": "sebastiannielsen",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "I think a problem with this method is that it can't be configured CA-wise.\nOne way would be to add the caaIdentity in the beginning of the record, but a better way would be to insert it as a new tagname instead called \"security=\".\n\nAlso I think the record is superflous since it exist new CAA tagnames that can be used to restrict issuance, for example:\nvalidationmethods and accounturi parameters.\n\nI think this would best be suitable for a tagname called \"security\" instead, that comtains a flattened tag-value pairs.\n\nThis tag-value  paris:\n\n`methods=secure-dns-record-change,http-validation-over-tls;options=authenticated-policy-retrieval`\n\nwould flattened, become:\n\n`methods,secure-dns-record-change,http-validation-over-tls,options,authenticated-policy-retrieval`\n\nwhich is then inserted into a \"security\" tagname, so it would look like this:\n\n`sebbe.eu CAA issue \"letsencrypt.org;validationmethods=dns-01,http-01;security=methods,secure-dns-record-change,http-validation-over-tls,options,authenticated-policy-retrieval\"`\n\nThat would thus require the parser to read each value from the comma separated list in order, and then \"switch\" to different options when it stumbles upon the keyword for that option (for example methods, or options).\n\nAn \"options-critical\" would in this situation not make sense, since you would know what your CA supports and only insert values they understand.",
+      "createdAt": "2026-05-18T03:40:53Z",
+      "updatedAt": "2026-05-18T03:40:53Z",
+      "closedAt": null,
+      "comments": []
+    }
+  ],
   "pulls": [
     {
       "number": 1,
